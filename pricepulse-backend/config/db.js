@@ -1,31 +1,5 @@
 const mysql = require('mysql2');
 
-const aivenCA = `-----BEGIN CERTIFICATE-----
-MIIERDCCAqygAwIBAgIUSwXaF88KsNlyHPjmxGadDGXgz0kwDQYJKoZIhvcNAQEM
-BQAwOjE4MDYGA1UEAwwvYjMzNzk5YzUtNzE0Ny00NDhhLTk2MDktYjQxNDc4MWQ4
-M2M3IFByb2plY3QgQ0EwHhcNMjYwMzMxMTgxMTE1WhcNMzYwMzI4MTgxMTE1WjA6
-MTgwNgYDVQQDDC9iMzM3OTljNS03MTQ3LTQ0OGEtOTYwOS1iNDE0NzgxZDgzYzcg
-UHJvamVjdCBDQTCCAaIwDQYJKoZIhvcNAQEBBQADggGPADCCAYoCggGBAMxxbKzb
-UxWX2dCxyuT9cDo1mck2PRZS2N3FDDnny9q8XDk1WaafdOCjJKKAkO5MMHvzdjpg
-12OBe8tRS9F8mRdm/vLb7CyxtxmswOYqPR+AF6t2X8HVF2yeY1KIT51T7xQmw8LT
-yuYhdCveD1vZpq6/TjTuIosDXKgEJiwT+juP2LmNBaf0Smc+npHcoYpQ+w7LpRsN
-xcA5adP8mHDL5Y+9Aoc2n4rjdUnjmS8M8wbxkwzUF2QBKDN5wIvrsxi7PxTB5wzB
-LsBG5cOvSOTeCOk55BIMUILpD1LA/5GVgGsMeGp2pcf6hFlfH9Qck+w4w9WAHKPA
-mMoXEAd78HprVUDYAqp4CRxFtV7QRn+0QIQAlGfspneyt2A0x2Csp3irYwx0CR1P
-M7eXVhKdXhSG6Fvc5092NKPtqnzkpU/QpSZCIGRUcvBqUqKVLtUKrE3VFrAH5l1T
-gXw7Si1BeIY2bTepoaGlyppluR7P1zNJavtEWPa1RU7G6U4RDorKnZ9AjQIDAQAB
-o0IwQDAdBgNVHQ4EFgQUlabr9eDovnpfAi4d2NZorHy+UXgwEgYDVR0TAQH/BAgw
-BgEB/wIBADALBgNVHQ8EBAMCAQYwDQYJKoZIhvcNAQEMBQADggGBAHefV/j8vMe1
-VmzZ0vMEOzS/5NgmKjFyAiAw0ogOb+Eph/kNK8DlMNSbr8XhxSMTF2wxLT/0MGoS
-Xc7GrbXJ6TppAyn+Ob/mTiUILdZA6rd6SZJRP7FuOt6/WB7Qk3n5Ovg1IJ6WHWYs
-T8djwtIheoTrL9lZVXuxWHHjyLAQOJk3ifalYa+uHrwVsxi8SG4Jp0dYv3z+xpj4
-VrtQQt+OomVGW5Bej3g8IF+/GCBnVinEE82rXtXgglUIKGzz1YSYCjHgHCXg148a
-+y140duikQAzmiJ8g0XXTiLg40Dx8bLRQy+/SCZE1zR8mIwRrWHGXdeRZh62GX/v
-2q5i6XJe8Tp7dEmaY144MCyD4RaljhmqxvBdrsa+1QhGapXDq/qtuUVKylj5xnYw
-l1QWxzqqiNLaWbokfMYnqGm55kdDRsVjBiYc23UytAdZRTOQQkBQnxbTDhDUcR1R
-ZyP1iDzs2fdZXwHGH2Co9khFqrbYXGcsDHuLEUOTs9fnmXEGhCWNSQ==
------END CERTIFICATE-----`;
-
 const pool = mysql.createPool({
   host: process.env.DB_HOST,
   port: parseInt(process.env.DB_PORT) || 3306,
@@ -33,8 +7,7 @@ const pool = mysql.createPool({
   password: process.env.DB_PASSWORD,
   database: process.env.DB_NAME,
   ssl: {
-    ca: aivenCA,
-    rejectUnauthorized: true,
+    rejectUnauthorized: false
   },
   waitForConnections: true,
   connectionLimit: 10,
