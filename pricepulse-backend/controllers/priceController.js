@@ -105,3 +105,23 @@ exports.getSystemStats = async (req, res) => {
     res.status(500).json({ error: "Internal Server Error", message: err.message });
   }
 };
+
+exports.getSuggestions = async (req, res) => {
+  const q = req.query.q;
+  if (!q || q.length < 2) return res.json([]);
+  
+  try {
+    const query = `
+      SELECT DISTINCT p.id, p.name, p.category 
+      FROM products p
+      INNER JOIN price_entries pe ON p.id = pe.product_id
+      WHERE p.name LIKE ? OR p.id LIKE ?
+      LIMIT 8
+    `;
+    const [results] = await db.query(query, [`%${q}%`, `%${q}%`]);
+    res.json(results);
+  } catch (err) {
+    console.error("Suggestions Error:", err);
+    res.status(500).json({ error: "Server Error" });
+  }
+};
