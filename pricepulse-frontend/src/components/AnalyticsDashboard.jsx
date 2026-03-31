@@ -26,26 +26,109 @@ const AnalyticsDashboard = () => {
 
   if (!analytics) return null;
 
-  const handleDownloadCSV = () => {
-    const csvContent = "data:text/csv;charset=utf-8," 
-      + "Metric,Value\n"
-      + `Product ID,${analytics.product_id || searchId}\n`
-      + `Product Name,${analytics.product_name}\n`
-      + `Category,${analytics.category || 'General'}\n`
-      + `Average Price (INR),${analytics.average_price}\n`
-      + `Min Price,${analytics.min_price}\n`
-      + `Max Price,${analytics.max_price}\n`
-      + `Nodes Verified,${analytics.total_samples}\n`
-      + `Optimal Low,${analytics.fair_range?.low || 0}\n`
-      + `Optimal High,${analytics.fair_range?.high || 0}`;
-      
-    const encodedUri = encodeURI(csvContent);
-    const link = document.createElement("a");
-    link.setAttribute("href", encodedUri);
-    link.setAttribute("download", `PricePulse_Report_${analytics.product_id || searchId}.csv`);
-    document.body.appendChild(link);
-    link.click();
-    document.body.removeChild(link);
+  const handleDownloadPDF = () => {
+    import('jspdf').then(({ default: jsPDF }) => {
+      import('jspdf-autotable').then(() => {
+        const doc = new jsPDF({ orientation: 'portrait', unit: 'mm', format: 'a4' });
+        const pageW = doc.internal.pageSize.getWidth();
+        const pageH = doc.internal.pageSize.getHeight();
+
+        // ─── Header Banner ───────────────────────────────────────────
+        doc.setFillColor(6, 182, 212);
+        doc.rect(0, 0, pageW, 32, 'F');
+        doc.setFillColor(4, 120, 170);
+        doc.rect(0, 26, pageW, 6, 'F');
+
+        doc.setTextColor(255, 255, 255);
+        doc.setFontSize(22);
+        doc.setFont('helvetica', 'bold');
+        doc.text('PRICEPULSE', 14, 18);
+
+        doc.setFontSize(8);
+        doc.setFont('helvetica', 'normal');
+        doc.setTextColor(220, 245, 255);
+        doc.text('HYPERLOCAL MATRIX ANALYSIS REPORT', 14, 26);
+        doc.text(`Generated  ${new Date().toLocaleString()}`, pageW - 14, 26, { align: 'right' });
+
+        // ─── Product Title block ──────────────────────────────────────
+        doc.setTextColor(20, 20, 40);
+        doc.setFontSize(20);
+        doc.setFont('helvetica', 'bold');
+        doc.text(analytics.product_name || 'Unknown Product', 14, 50);
+
+        doc.setFontSize(9);
+        doc.setFont('helvetica', 'normal');
+        doc.setTextColor(100, 110, 130);
+        doc.text(`Product / Query ID: ${analytics.product_id || searchId}`, 14, 58);
+        doc.text(`Category: ${analytics.category || 'General'}`, 14, 64);
+
+        // ─── KPI Boxes ───────────────────────────────────────────────
+        const kpiY = 74;
+        const kpiH = 22;
+        const kpiW = (pageW - 28 - 6) / 3;
+        const kpis = [
+          { label: 'AVG PRICE', value: `INR ${parseFloat(analytics.average_price).toFixed(2)}`, accent: [6, 182, 212] },
+          { label: 'MIN PRICE', value: `INR ${parseFloat(analytics.min_price).toFixed(2)}`, accent: [16, 185, 129] },
+          { label: 'MAX PRICE', value: `INR ${parseFloat(analytics.max_price).toFixed(2)}`, accent: [239, 68, 68] },
+        ];
+        kpis.forEach((kpi, i) => {
+          const x = 14 + i * (kpiW + 3);
+          doc.setFillColor(...kpi.accent);
+          doc.roundedRect(x, kpiY, kpiW, kpiH, 3, 3, 'F');
+          doc.setTextColor(255, 255, 255);
+          doc.setFontSize(7);
+          doc.setFont('helvetica', 'bold');
+          doc.text(kpi.label, x + kpiW / 2, kpiY + 7, { align: 'center' });
+          doc.setFontSize(11);
+          doc.text(kpi.value, x + kpiW / 2, kpiY + 16, { align: 'center' });
+        });
+
+        // ─── Detailed Table ───────────────────────────────────────────
+        const volatility = ((analytics.max_price - analytics.min_price) / analytics.average_price * 100).toFixed(1);
+        const viText = volatility > 20 ? 'HIGH INSTABILITY' : volatility > 10 ? 'MODERATELY VOLATILE' : 'STABLE MARKET';
+        const confScore = Math.min(Math.round((analytics.total_samples / 30) * 100), 100);
+
+        doc.autoTable({
+          startY: kpiY + kpiH + 8,
+          head: [['Metric', 'Value']],
+          body: [
+            ['Product Name', analytics.product_name || 'N/A'],
+            ['Product ID', String(analytics.product_id || searchId)],
+            ['Community Average Price', `INR ${parseFloat(analytics.average_price).toFixed(2)}`],
+            ['Lowest Recorded Price', `INR ${parseFloat(analytics.min_price).toFixed(2)}`],
+            ['Highest Recorded Price', `INR ${parseFloat(analytics.max_price).toFixed(2)}`],
+            ['Optimal Safe Buy (Min)', `INR ${parseFloat(analytics.fair_range?.low || 0).toFixed(2)}`],
+            ['Optimal Safe Buy (Max)', `INR ${parseFloat(analytics.fair_range?.high || 0).toFixed(2)}`],
+            ['Volatility Index', `${volatility}%  —  ${viText}`],
+            ['Data Confidence Score', `${confScore}%`],
+            ['Matrix Nodes Verified', `${analytics.total_samples} data points`],
+            ['Category', analytics.category || 'General'],
+          ],
+          headStyles: { fillColor: [6, 182, 212], textColor: 255, fontStyle: 'bold', fontSize: 9 },
+          bodyStyles: { fontSize: 9, textColor: [40, 40, 60] },
+          alternateRowStyles: { fillColor: [240, 248, 255] },
+          columnStyles: { 0: { fontStyle: 'bold', cellWidth: 75 } },
+          margin: { left: 14, right: 14 },
+        });
+
+        // ─── Footer ───────────────────────────────────────────────────
+        const finalY = doc.lastAutoTable.finalY + 12;
+        doc.setFillColor(245, 248, 255);
+        doc.rect(14, finalY, pageW - 28, 18, 'F');
+        doc.setTextColor(100, 110, 140);
+        doc.setFontSize(8);
+        doc.setFont('helvetica', 'bold');
+        doc.text('Pokemon Team', 14 + 4, finalY + 7);
+        doc.setFont('helvetica', 'normal');
+        doc.text('Team Leader: Nirmal Kumar  |  Developer: Tanishq  |  Designer: Taniya Singla  |  Tester: Tanisha Dua', 14 + 4, finalY + 13);
+
+        doc.setFontSize(7);
+        doc.setTextColor(180, 190, 200);
+        doc.text('This report is auto-generated by PricePulse. Data sourced from community matrix nodes.', pageW / 2, pageH - 8, { align: 'center' });
+
+        doc.save(`PricePulse_Report_${analytics.product_id || searchId}.pdf`);
+      });
+    });
   };
 
   const confidenceScore = Math.min(Math.round((analytics.total_samples / 30) * 100), 100);
@@ -86,11 +169,11 @@ const AnalyticsDashboard = () => {
           <div className="flex items-center gap-2 mt-2 md:mt-0">
             <span className="text-[10px] uppercase font-bold tracking-widest text-slate-500 dark:text-slate-400 bg-white/50 dark:bg-[#161920]/80 border border-slate-200 dark:border-white/10 px-3 py-1.5 rounded-xl border-dashed">ID: {searchId}</span>
             <button 
-              onClick={handleDownloadCSV}
+              onClick={handleDownloadPDF}
               className="flex items-center gap-1.5 text-[10px] uppercase font-black tracking-widest px-3 py-1.5 rounded-xl bg-cyan-50 hover:bg-cyan-500 text-cyan-600 hover:text-white dark:bg-cyan-500/10 dark:hover:bg-cyan-500/30 dark:text-cyan-400 transition-all shadow-sm group border border-cyan-200 dark:border-cyan-500/20"
-              title="Export Report to CSV"
+              title="Export Full PDF Report"
             >
-              <DownloadCloud size={14} className="group-hover:animate-bounce" /> Export
+              <DownloadCloud size={14} className="group-hover:animate-bounce" /> PDF Report
             </button>
           </div>
         </div>
