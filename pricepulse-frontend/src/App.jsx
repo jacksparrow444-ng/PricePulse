@@ -57,7 +57,7 @@ function App() {
       <div className="absolute top-0 left-0 w-full h-full overflow-hidden z-0 pointer-events-none transition-opacity duration-1000">
         <div className="absolute top-[-10%] left-[-10%] w-[40%] h-[40%] bg-cyan-400/20 dark:bg-cyan-600/20 blur-[120px] rounded-full mix-blend-multiply dark:mix-blend-screen" />
         <div className="absolute bottom-[-10%] right-[-10%] w-[40%] h-[40%] bg-purple-400/20 dark:bg-purple-600/20 blur-[120px] rounded-full mix-blend-multiply dark:mix-blend-screen" />
-        <div className="absolute inset-0 bg-[url('https://grainy-gradients.vercel.app/noise.svg')] opacity-[0.03] dark:opacity-20 mix-blend-normal dark:mix-blend-soft-light transition-opacity duration-500"></div>
+        <div className="absolute inset-0 bg-[url('https://grainy-gradients.vercel.app/noise.svg')] opacity-[0.03] dark:opacity-[0.15] mix-blend-normal dark:mix-blend-soft-light transition-opacity duration-500 animate-grain pointer-events-none"></div>
       </div>
 
       <div className="relative z-10 p-4 md:p-8 max-w-[1400px] mx-auto">
