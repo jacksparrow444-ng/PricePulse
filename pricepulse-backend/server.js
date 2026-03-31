@@ -1,5 +1,4 @@
 // Ye line sabse upar honi chahiye (agar pehle se nahi hai toh)
-process.env.NODE_TLS_REJECT_UNAUTHORIZED = '0';
 require('dotenv').config();
 const mysql = require('mysql2');
 
