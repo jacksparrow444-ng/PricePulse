@@ -11,9 +11,12 @@ async function seedDatabase() {
     console.log('🌱 Starting Data Injection Simulation...');
 
     // 1. CLEAR EXISTING DATA
+    await db.query('SET FOREIGN_KEY_CHECKS = 0');
     await db.query('TRUNCATE TABLE price_entries');
     await db.query('TRUNCATE TABLE products');
+    await db.query('SET FOREIGN_KEY_CHECKS = 1');
     console.log('🧹 Cleaned existing ledgers.');
+
 
     // 2. DEFINE PRODUCTS
     const products = [
