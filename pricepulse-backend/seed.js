@@ -1,12 +1,42 @@
+require('dotenv').config();
 const mysql = require('mysql2/promise');
 
 async function seedDatabase() {
     const db = await mysql.createConnection({
-        host: 'localhost',
-        user: 'root',
-        password: '',
-        database: 'pricepulse_db'
+        host: process.env.DB_HOST,
+        port: process.env.DB_PORT,
+        user: process.env.DB_USER,
+        password: process.env.DB_PASSWORD,
+        database: process.env.DB_NAME,
+        ssl: {
+            rejectUnauthorized: false
+        }
     });
+
+    console.log('🌱 Connected to database. Ensuring tables exist...');
+
+    // 0. ENSURE TABLES EXIST
+    await db.query(`
+        CREATE TABLE IF NOT EXISTS products (
+            id INT PRIMARY KEY,
+            name VARCHAR(255) NOT NULL,
+            category VARCHAR(255) NOT NULL
+        )
+    `);
+
+    await db.query(`
+        CREATE TABLE IF NOT EXISTS price_entries (
+            id INT AUTO_INCREMENT PRIMARY KEY,
+            product_id INT NOT NULL,
+            product_name VARCHAR(255) NOT NULL,
+            price DECIMAL(10, 2) NOT NULL,
+            location VARCHAR(255) NOT NULL,
+            store_name VARCHAR(255) NOT NULL,
+            image_path VARCHAR(255),
+            created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+            FOREIGN KEY (product_id) REFERENCES products(id) ON DELETE CASCADE
+        )
+    `);
 
     console.log('🌱 Starting Data Injection Simulation...');
 

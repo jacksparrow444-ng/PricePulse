@@ -74,7 +74,12 @@ exports.getSystemStats = async (req, res) => {
     const [results] = await db.query(query);
     res.json(results[0]);
   } catch (err) {
-    console.error("Stats Error:", err);
-    res.status(500).json({ error: "Internal Server Error" });
+    console.error("Stats Error Detail:", {
+      message: err.message,
+      code: err.code,
+      errno: err.errno,
+      sqlState: err.sqlState
+    });
+    res.status(500).json({ error: "Internal Server Error", message: err.message });
   }
 };
