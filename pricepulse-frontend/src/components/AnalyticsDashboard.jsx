@@ -1,6 +1,6 @@
 import React, { useEffect, useRef } from 'react';
 import { motion, animate } from 'framer-motion';
-import { ShieldCheck, Info, Image as ImageIcon } from 'lucide-react';
+import { ShieldCheck, Info, Image as ImageIcon, DownloadCloud } from 'lucide-react';
 import { PieChart, Pie, Cell, ResponsiveContainer } from 'recharts';
 import { usePrice } from '../context/PriceContext';
 
@@ -25,6 +25,28 @@ const AnalyticsDashboard = () => {
   const { analytics, searchId, IMAGE_BASE, theme } = usePrice();
 
   if (!analytics) return null;
+
+  const handleDownloadCSV = () => {
+    const csvContent = "data:text/csv;charset=utf-8," 
+      + "Metric,Value\n"
+      + `Product ID,${analytics.product_id || searchId}\n`
+      + `Product Name,${analytics.product_name}\n`
+      + `Category,${analytics.category || 'General'}\n`
+      + `Average Price (INR),${analytics.average_price}\n`
+      + `Min Price,${analytics.min_price}\n`
+      + `Max Price,${analytics.max_price}\n`
+      + `Nodes Verified,${analytics.total_samples}\n`
+      + `Optimal Low,${analytics.fair_range?.low || 0}\n`
+      + `Optimal High,${analytics.fair_range?.high || 0}`;
+      
+    const encodedUri = encodeURI(csvContent);
+    const link = document.createElement("a");
+    link.setAttribute("href", encodedUri);
+    link.setAttribute("download", `PricePulse_Report_${analytics.product_id || searchId}.csv`);
+    document.body.appendChild(link);
+    link.click();
+    document.body.removeChild(link);
+  };
 
   const confidenceScore = Math.min(Math.round((analytics.total_samples / 30) * 100), 100);
   const isDark = theme === 'dark';
@@ -57,11 +79,20 @@ const AnalyticsDashboard = () => {
       <div className="md:col-span-2 bg-gradient-to-br from-white/90 to-slate-50/90 border-cyan-400/40 dark:from-[#0a0c10]/80 dark:to-[#161920]/80 p-8 rounded-[2.5rem] border dark:border-cyan-500/30 relative overflow-hidden group shadow-[0_0_40px_rgba(6,182,212,0.15)] dark:shadow-[0_0_60px_rgba(6,182,212,0.15)] transition-colors duration-500 backdrop-blur-3xl">
         <div className="absolute -right-20 -top-20 w-64 h-64 bg-cyan-400/10 blur-[80px] rounded-full group-hover:bg-cyan-500/15 transition-colors duration-1000"></div>
 
-        <div className="flex justify-between items-start mb-4 relative z-10">
+        <div className="flex justify-between items-start mb-4 relative z-10 flex-wrap gap-2">
           <p className="font-bold text-[10px] uppercase tracking-widest flex items-center gap-2 border border-emerald-200 dark:border-emerald-500/20 bg-emerald-50 dark:bg-emerald-500/10 text-emerald-700 dark:text-emerald-400 px-3 py-1.5 rounded-full backdrop-blur-sm">
             <ShieldCheck size={14} /> Community Consensus Price
           </p>
-          <span className="text-[10px] uppercase font-bold tracking-widest text-slate-400 dark:text-slate-500 mt-2 bg-white/50 dark:bg-transparent px-2 py-1 rounded-md">ID: {searchId}</span>
+          <div className="flex items-center gap-2 mt-2 md:mt-0">
+            <span className="text-[10px] uppercase font-bold tracking-widest text-slate-500 dark:text-slate-400 bg-white/50 dark:bg-[#161920]/80 border border-slate-200 dark:border-white/10 px-3 py-1.5 rounded-xl border-dashed">ID: {searchId}</span>
+            <button 
+              onClick={handleDownloadCSV}
+              className="flex items-center gap-1.5 text-[10px] uppercase font-black tracking-widest px-3 py-1.5 rounded-xl bg-cyan-50 hover:bg-cyan-500 text-cyan-600 hover:text-white dark:bg-cyan-500/10 dark:hover:bg-cyan-500/30 dark:text-cyan-400 transition-all shadow-sm group border border-cyan-200 dark:border-cyan-500/20"
+              title="Export Report to CSV"
+            >
+              <DownloadCloud size={14} className="group-hover:animate-bounce" /> Export
+            </button>
+          </div>
         </div>
 
         <h3 className="text-2xl font-black text-slate-900 dark:text-white mb-3 tracking-tight relative z-10">{analytics.product_name}</h3>
