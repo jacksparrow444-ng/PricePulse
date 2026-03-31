@@ -1,4 +1,4 @@
-const mysql = require('mysql2');
+const mysql = require('mysql2/promise');
 
 const pool = mysql.createPool({
   host: process.env.DB_HOST,
@@ -24,4 +24,4 @@ pool.getConnection()
     console.error('Check your DB_HOST, DB_USER, etc. in Render Environment Variables.');
   });
 
-module.exports = pool.promise();
+module.exports = pool;
