@@ -28,7 +28,7 @@ export const PriceProvider = ({ children }) => {
   const [preview, setPreview] = useState(null);
   const [lastUpdated, setLastUpdated] = useState(Date.now());
 
-  const API_BASE = import.meta.env.VITE_API_URL || 'http://localhost:5000';
+  const API_BASE = import.meta.env.VITE_API_URL || 'https://pricepulse-qmet.onrender.com';
   const API_URL = `${API_BASE}/api`;
 
   useEffect(() => {

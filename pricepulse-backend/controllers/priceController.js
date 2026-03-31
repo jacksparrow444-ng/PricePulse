@@ -20,16 +20,38 @@ exports.submitPrice = async (req, res) => {
 };
 
 exports.getAnalytics = async (req, res) => {
-  const id = req.params.id;
+  const param = req.params.id;
   try {
-    const query = `
-      SELECT pe.*, p.category, p.name as p_name 
-      FROM price_entries pe
-      LEFT JOIN products p ON pe.product_id = p.id
-      WHERE pe.product_id = ? ORDER BY CAST(pe.price AS DECIMAL(10,2)) ASC
-    `;
+    let query;
+    let queryParams = [];
 
-    const [results] = await db.query(query, [id]);
+    if (!isNaN(param)) {
+      // Search by Exact Product ID
+      query = `
+        SELECT pe.*, p.category, p.name as p_name 
+        FROM price_entries pe
+        LEFT JOIN products p ON pe.product_id = p.id
+        WHERE pe.product_id = ? 
+        ORDER BY CAST(pe.price AS DECIMAL(10,2)) ASC
+      `;
+      queryParams = [param];
+    } else {
+      // Search by Product Name (Fuzzy matching)
+      query = `
+        SELECT pe.*, p.category, p.name as p_name 
+        FROM price_entries pe
+        LEFT JOIN products p ON pe.product_id = p.id
+        WHERE pe.product_id = (
+            SELECT id FROM products 
+            WHERE name LIKE ? 
+            LIMIT 1
+        )
+        ORDER BY CAST(pe.price AS DECIMAL(10,2)) ASC
+      `;
+      queryParams = [`%${param}%`];
+    }
+
+    const [results] = await db.query(query, queryParams);
 
     if (results.length === 0) {
       return res.json({ total_samples: 0 });
