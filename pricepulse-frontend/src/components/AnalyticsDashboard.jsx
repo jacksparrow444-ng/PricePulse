@@ -54,7 +54,7 @@ const AnalyticsDashboard = () => {
 
   return (
     <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
-      <div className="md:col-span-2 bg-gradient-to-br from-white to-slate-50 border-slate-200/60 dark:from-[#0f1115] dark:to-[#161920] p-8 rounded-[2.5rem] border dark:border-white/5 relative overflow-hidden group shadow-[0_8px_30px_rgb(0,0,0,0.06)] dark:shadow-2xl transition-colors duration-500">
+      <div className="md:col-span-2 bg-gradient-to-br from-white/90 to-slate-50/90 border-cyan-400/40 dark:from-[#0a0c10]/80 dark:to-[#161920]/80 p-8 rounded-[2.5rem] border dark:border-cyan-500/30 relative overflow-hidden group shadow-[0_0_40px_rgba(6,182,212,0.15)] dark:shadow-[0_0_60px_rgba(6,182,212,0.15)] transition-colors duration-500 backdrop-blur-3xl">
         <div className="absolute -right-20 -top-20 w-64 h-64 bg-cyan-400/10 blur-[80px] rounded-full group-hover:bg-cyan-500/15 transition-colors duration-1000"></div>
 
         <div className="flex justify-between items-start mb-4 relative z-10">

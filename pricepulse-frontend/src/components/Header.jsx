@@ -28,7 +28,7 @@ const Header = () => {
           <div className="absolute inset-0 bg-white/20 rounded-2xl animate-pulse opacity-20"></div>
         </div>
         <div>
-          <h1 className="text-2xl font-black bg-clip-text text-transparent bg-gradient-to-r from-cyan-600 to-purple-600 dark:from-cyan-400 dark:to-purple-500 tracking-tight">
+          <h1 className="text-2xl font-black bg-clip-text text-transparent bg-gradient-to-r from-cyan-400 to-purple-500 tracking-tight animate-glitch relative inline-block">
             PricePulse <span className="text-cyan-500">.</span>
           </h1>
           <p className="text-[9px] font-bold uppercase tracking-[0.3em] text-slate-500 mt-0.5">Advanced Hyperlocal Intelligence</p>
