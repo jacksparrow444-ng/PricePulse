@@ -49,17 +49,17 @@ const AnalyticsDashboard = () => {
 
         <h3 className="text-2xl font-black text-slate-900 dark:text-white mb-3 tracking-tight relative z-10">{analytics.product_name}</h3>
 
-        <div className="flex items-end gap-6 relative z-10">
-          <h2 className="text-6xl md:text-8xl font-black text-slate-800 dark:text-white tracking-tighter">
-            <span className="text-cyan-500 text-4xl align-top">Rs. </span>
+        <div className="flex flex-col md:flex-row md:items-end gap-4 md:gap-8 relative z-10">
+          <h2 className="text-7xl md:text-[8rem] font-black text-slate-800 dark:text-white tracking-tighter leading-none flex items-start">
+            <span className="text-cyan-500 text-4xl md:text-6xl pr-2 translate-y-2 md:translate-y-4">₹</span>
             {analytics.average_price}
           </h2>
-          <div className="pb-2 relative group cursor-help mt-4 md:mt-0">
-            <p className="text-[10px] uppercase font-bold text-slate-400 dark:text-slate-500 tracking-widest mb-1 flex items-center gap-1">
-              Optimal Range <Info size={10} className="text-slate-300 dark:text-slate-400" />
+          <div className="pb-2 md:pb-4 relative group cursor-help mt-2 md:mt-0">
+            <p className="text-[10px] md:text-xs uppercase font-bold text-slate-400 dark:text-slate-500 tracking-widest mb-1 flex items-center gap-1">
+              Optimal Range <Info size={12} className="text-slate-300 dark:text-slate-400" />
             </p>
-            <p className="text-lg font-bold text-slate-600 dark:text-slate-300 bg-slate-100/50 dark:bg-slate-800/20 px-3 py-1 rounded-lg">
-              Rs. {analytics.fair_range.low} <span className="text-slate-400 dark:text-slate-600 font-light mx-1">-</span> Rs. {analytics.fair_range.high}
+            <p className="text-xl md:text-2xl font-black text-slate-600 dark:text-slate-300 bg-slate-100/50 dark:bg-slate-800/20 px-4 py-2 rounded-xl inline-block shadow-sm">
+              ₹ {analytics.fair_range.low} <span className="text-slate-400 dark:text-slate-600 font-light mx-1">-</span> ₹ {analytics.fair_range.high}
             </p>
           </div>
         </div>

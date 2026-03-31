@@ -12,6 +12,7 @@ import DataInjection from './components/DataInjection';
 import AnalyticsDashboard from './components/AnalyticsDashboard';
 import VolatilityChart from './components/VolatilityChart';
 import NodeLedger from './components/NodeLedger';
+import Footer from './components/Footer';
 
 function App() {
   const { 
@@ -117,6 +118,9 @@ function App() {
             )}
           </motion.div>
         </motion.main>
+        
+        {/* Made by Pokemon Team Footer */}
+        <Footer />
       </div>
 
       <style dangerouslySetInnerHTML={{

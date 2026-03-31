@@ -20,7 +20,7 @@ const QueryEngine = () => {
             type="text"
             value={searchId}
             onChange={(e) => setSearchId(e.target.value)}
-            placeholder="Search Product ID..."
+            placeholder="Search Product ID or Name..."
             className="w-full bg-slate-50 border border-slate-200 focus:border-cyan-500 rounded-2xl py-4 pl-5 pr-14 outline-none text-sm font-medium text-slate-900 placeholder-slate-400 dark:bg-[#161920] dark:border-white/5 dark:focus:border-cyan-500/50 dark:text-white dark:placeholder-slate-600 transition-all font-mono"
           />
           <button
