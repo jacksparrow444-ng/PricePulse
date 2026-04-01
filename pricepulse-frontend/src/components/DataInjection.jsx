@@ -97,6 +97,33 @@ const DataInjection = () => {
           </div>
         </div>
 
+        {/* Photo Upload */}
+        <div className="space-y-1.5">
+          <label className="text-[10px] font-bold text-slate-500 uppercase tracking-wider flex items-center gap-1.5">
+            📷 Upload a Photo <span className="text-slate-400 font-normal normal-case tracking-normal">(optional – bill, tag, or shelf price)</span>
+          </label>
+          <div className="relative group cursor-pointer w-full">
+            <input
+              type="file"
+              accept="image/*"
+              onChange={handleFileChange}
+              className="absolute inset-0 w-full h-full opacity-0 cursor-pointer z-10"
+            />
+            <div className="w-full border-2 border-dashed border-slate-200 dark:border-white/10 rounded-2xl flex items-center justify-center bg-slate-50 dark:bg-[#161920] group-hover:bg-cyan-50/50 dark:group-hover:bg-cyan-500/5 group-hover:border-cyan-400 transition-all h-28 overflow-hidden">
+              {preview ? (
+                <img src={preview} className="h-full w-full object-cover rounded-2xl" alt="Preview" />
+              ) : (
+                <div className="flex flex-col items-center gap-2 pointer-events-none">
+                  <div className="w-10 h-10 rounded-full bg-slate-100 dark:bg-white/5 flex items-center justify-center group-hover:bg-cyan-100 dark:group-hover:bg-cyan-500/10 transition-colors">
+                    <span className="text-xl">📸</span>
+                  </div>
+                  <span className="text-[10px] font-bold text-slate-400 group-hover:text-cyan-500 transition-colors">Click to upload image</span>
+                </div>
+              )}
+            </div>
+          </div>
+        </div>
+
         {/* Submit */}
         <button
           type="submit"
