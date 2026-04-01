@@ -13,11 +13,11 @@ import AnalyticsDashboard from './components/AnalyticsDashboard';
 import VolatilityChart from './components/VolatilityChart';
 import NodeLedger from './components/NodeLedger';
 import Footer from './components/Footer';
+import SplashScreen from './components/SplashScreen';
 
 function App() {
-  const { 
-    theme, fetchSystemStats, systemStats, analytics
-  } = usePrice();
+  const { theme, fetchSystemStats, systemStats, analytics } = usePrice();
+  const [splashDone, setSplashDone] = React.useState(false);
 
   useEffect(() => {
     fetchSystemStats();
@@ -37,6 +37,16 @@ function App() {
 
   return (
     <div className="min-h-screen bg-slate-50 dark:bg-[#050505] text-slate-800 dark:text-slate-300 font-sans selection:bg-cyan-500/30 overflow-hidden relative transition-colors duration-500">
+      {/* Splash intro */}
+      <SplashScreen onDone={() => setSplashDone(true)} />
+
+      {/* Main app — fades in after splash */}
+      <motion.div
+        initial={{ opacity: 0 }}
+        animate={{ opacity: splashDone ? 1 : 0 }}
+        transition={{ duration: 0.5 }}
+        style={{ pointerEvents: splashDone ? 'auto' : 'none' }}
+      >
       
       <Toaster 
         position="bottom-center"
@@ -148,6 +158,7 @@ function App() {
         .dark .custom-scrollbar::-webkit-scrollbar-thumb { background: rgba(255,255,255,0.1); }
         .mask-image-scroll { -webkit-mask-image: linear-gradient(to right, black 80%, transparent 100%); mask-image: linear-gradient(to right, black 80%, transparent 100%); }
       `}} />
+      </motion.div>
     </div>
   );
 }
