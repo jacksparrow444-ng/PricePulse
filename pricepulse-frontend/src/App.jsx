@@ -44,6 +44,31 @@ function App() {
         )}
       </AnimatePresence>
 
+      <Toaster 
+        position="bottom-center"
+        toastOptions={{
+          style: {
+            background: theme === 'dark' ? '#0f1115' : '#ffffff',
+            color: theme === 'dark' ? '#fff' : '#0f172a',
+            border: '1px solid rgba(34,211,238,0.3)',
+            borderRadius: '9999px',
+            fontSize: '14px',
+            fontWeight: 'bold',
+            padding: '16px 24px',
+            backdropFilter: 'blur(10px)'
+          }
+        }} 
+      />
+
+      {/* ULTRA SCI-FI Decorative Background Elements */}
+      <div className="fixed top-0 left-0 w-full h-full overflow-hidden z-0 pointer-events-none transition-opacity duration-1000">
+        <div className="absolute top-[-20%] left-[-10%] w-[50%] h-[50%] bg-cyan-500/10 blur-[80px] rounded-full mix-blend-screen opacity-50 animate-[pulse_8s_ease-in-out_infinite]" />
+        <div className="absolute bottom-[-20%] right-[-10%] w-[50%] h-[50%] bg-purple-600/10 blur-[80px] rounded-full mix-blend-screen opacity-50 animate-[pulse_10s_ease-in-out_infinite_reverse]" />
+        <div className="absolute inset-0 bg-[linear-gradient(to_right,#06b6d408_1px,transparent_1px),linear-gradient(to_bottom,#06b6d408_1px,transparent_1px)] bg-[size:60px_60px] [mask-image:radial-gradient(ellipse_80%_80%_at_50%_20%,#000_40%,transparent_100%)]"></div>
+        <div className="absolute inset-0 bg-[linear-gradient(rgba(0,0,0,0)_50%,rgba(0,0,0,0.15)_50%)] bg-[length:100%_4px] opacity-20 z-10"></div>
+        <div className="absolute inset-0 bg-[url('https://grainy-gradients.vercel.app/noise.svg')] opacity-[0.05] dark:opacity-[0.15] mix-blend-overlay animate-grain pointer-events-none z-20"></div>
+      </div>
+
       {/* Main app — fades in after splash */}
       <motion.div
         initial={{ opacity: 0 }}
@@ -64,6 +89,26 @@ function App() {
             >
               <QueryEngine />
               <DataInjection />
+
+              {/* System Stats Mini-Panel */}
+              {systemStats && (
+                <div className="glass-panel rounded-2xl p-4 shadow-xl transition-all duration-500 overflow-hidden relative">
+                  <div className="absolute inset-x-0 top-0 h-[1px] bg-gradient-to-r from-transparent via-cyan-500/20 to-transparent" />
+                  <div className="grid grid-cols-4 gap-2">
+                    {[
+                      { label: 'Products', val: systemStats.total_products, color: 'text-slate-800 dark:text-white' },
+                      { label: 'Entries', val: systemStats.total_entries, color: 'text-cyan-500' },
+                      { label: 'Locations', val: systemStats.total_locations, color: 'text-purple-500' },
+                      { label: 'Vendors', val: systemStats.total_vendors, color: 'text-emerald-500' }
+                    ].map((stat, i) => (
+                      <div key={i} className={`text-center ${i > 0 ? 'border-l border-white/10' : ''}`}>
+                        <p className="text-[8px] font-black text-slate-400 dark:text-slate-500 uppercase tracking-widest mb-1">{stat.label}</p>
+                        <p className={`font-mono font-black text-[12px] ${stat.color}`}>{stat.val}</p>
+                      </div>
+                    ))}
+                  </div>
+                </div>
+              )}
             </motion.div>
 
             {/* Right Column: Insights & Ledger */}
