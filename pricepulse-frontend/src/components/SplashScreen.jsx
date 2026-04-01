@@ -2,195 +2,199 @@ import React, { useState, useEffect } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
 
 const team = [
-  { name: 'Nirmal Kumar',  role: 'Team Leader',  color: '#22d3ee', delay: 0.1 },
-  { name: 'Tanishq',       role: 'Developer',    color: '#60a5fa', delay: 0.25 },
-  { name: 'Taniya Singla', role: 'Designer',     color: '#f472b6', delay: 0.4 },
-  { name: 'Tanisha Dua',   role: 'QA Tester',    color: '#34d399', delay: 0.55 },
+  { name: 'Nirmal Kumar',  role: 'Architect / Team Leader', color: '#22d3ee', delay: 0.8 },
+  { name: 'Tanishq',       role: 'Lead Systems Engineer',   color: '#60a5fa', delay: 1.0 },
+  { name: 'Taniya Singla', role: 'UX Visionary',            color: '#f472b6', delay: 1.2 },
+  { name: 'Tanisha Dua',   role: 'Security & Quality',      color: '#34d399', delay: 1.4 },
 ];
 
 const SplashScreen = ({ onDone }) => {
-  const [phase, setPhase] = useState('in');   // 'in' → 'hold' → 'out'
+  const [phase, setPhase] = useState('in');
 
   useEffect(() => {
-    // Phase 1: show team names → Phase 2: slide out
-    const t1 = setTimeout(() => setPhase('out'), 2600);
-    const t2 = setTimeout(() => onDone(), 3400);
-    return () => { clearTimeout(t1); clearTimeout(t2); };
-  }, []);
+    // Stage-managed timing for "High Power" feel
+    const timerOut = setTimeout(() => setPhase('out'), 4200);
+    const timerDone = setTimeout(() => onDone(), 5200);
+    return () => { clearTimeout(timerOut); clearTimeout(timerDone); };
+  }, [onDone]);
 
   return (
     <AnimatePresence>
       {phase !== 'done' && (
         <motion.div
-          key="splash"
-          initial={{ y: 0 }}
-          animate={phase === 'out' ? { y: '-100%' } : { y: 0 }}
-          transition={
-            phase === 'out'
-              ? { duration: 0.72, ease: [0.76, 0, 0.24, 1] }
-              : {}
-          }
-          className="fixed inset-0 z-[9999] flex flex-col items-center justify-center overflow-hidden"
-          style={{ background: '#050810' }}
+          key="splash-v2"
+          initial={{ opacity: 1 }}
+          animate={phase === 'out' ? { 
+            scale: 1.1, 
+            filter: 'blur(20px)',
+            opacity: 0,
+            transition: { duration: 0.8, ease: [0.7, 0, 0.3, 1] }
+          } : { opacity: 1 }}
+          className="fixed inset-0 z-[9999] flex flex-col items-center justify-center overflow-hidden bg-[#02040a]"
         >
-          {/* Glowing orb background */}
-          <div className="absolute inset-0 pointer-events-none">
-            <div
-              className="absolute rounded-full"
-              style={{
-                width: '60vw', height: '60vw',
-                top: '50%', left: '50%',
-                transform: 'translate(-50%, -50%)',
-                background: 'radial-gradient(circle, rgba(6,182,212,0.18) 0%, transparent 70%)',
-                filter: 'blur(40px)',
+          {/* HIGH-POWER BACKGROUND ENGINE */}
+          <div className="absolute inset-0 z-0 pointer-events-none">
+            {/* Deep Pulse Orbs */}
+            <motion.div 
+              animate={{ 
+                scale: [1, 1.2, 1],
+                opacity: [0.1, 0.15, 0.1]
               }}
+              transition={{ duration: 4, repeat: Infinity, ease: "easeInOut" }}
+              className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[100vmax] h-[100vmax] blur-[120px]" 
+              style={{ background: 'radial-gradient(circle, rgba(34,211,238,0.2) 0%, transparent 70%)' }}
             />
-            <div
-              className="absolute rounded-full"
-              style={{
-                width: '40vw', height: '40vw',
-                top: '30%', left: '60%',
-                background: 'radial-gradient(circle, rgba(168,85,247,0.12) 0%, transparent 70%)',
-                filter: 'blur(60px)',
-              }}
+            
+            {/* Scanning Line */}
+            <motion.div 
+              initial={{ top: '-10%' }}
+              animate={{ top: '110%' }}
+              transition={{ duration: 3, repeat: Infinity, ease: "linear" }}
+              className="absolute left-0 w-full h-[2px] bg-gradient-to-r from-transparent via-cyan-500/40 to-transparent z-10 shadow-[0_0_15px_rgba(34,211,238,0.5)]"
             />
-            {/* Grid overlay */}
-            <div
-              className="absolute inset-0 opacity-[0.07]"
-              style={{
-                backgroundImage:
-                  'linear-gradient(#22d3ee 1px, transparent 1px), linear-gradient(90deg, #22d3ee 1px, transparent 1px)',
-                backgroundSize: '50px 50px',
-              }}
-            />
+
+            {/* Matrix-style Backdrop Grid */}
+            <div className="absolute inset-0 opacity-[0.15] bg-[linear-gradient(rgba(34,211,238,0.1)_1px,transparent_1px),linear-gradient(90deg,rgba(34,211,238,0.1)_1px,transparent_1px)] bg-[size:40px_40px] [mask-image:radial-gradient(ellipse_60%_60%_at_50%_50%,#000_20%,transparent_100%)]" />
+
+            {/* Particle Dust Animation (CSS-based) */}
+            <div className="absolute inset-0 z-0 overflow-hidden">
+               {[...Array(20)].map((_, i) => (
+                 <motion.div
+                   key={i}
+                   initial={{ 
+                     x: Math.random() * window.innerWidth, 
+                     y: Math.random() * window.innerHeight,
+                     opacity: 0 
+                   }}
+                   animate={{ 
+                     y: [null, Math.random() * -100],
+                     opacity: [0, 0.3, 0],
+                     scale: [0, 1.5, 0]
+                   }}
+                   transition={{ 
+                     duration: 2 + Math.random() * 3, 
+                     repeat: Infinity, 
+                     delay: Math.random() * 2 
+                   }}
+                   className="absolute w-1 h-1 bg-cyan-400 rounded-full blur-[1px]"
+                 />
+               ))}
+            </div>
           </div>
 
-          {/* Content */}
-          <div className="relative z-10 flex flex-col items-center text-center px-8">
-
-            {/* Logo mark */}
-            <motion.div
-              initial={{ scale: 0, rotate: -180, opacity: 0 }}
-              animate={{ scale: 1, rotate: 0, opacity: 1 }}
-              transition={{ duration: 0.6, ease: [0.16, 1, 0.3, 1] }}
-              className="mb-6"
-            >
-              <div
-                className="w-16 h-16 rounded-2xl flex items-center justify-center mb-3 mx-auto shadow-[0_0_40px_rgba(34,211,238,0.5)]"
-                style={{ background: 'linear-gradient(135deg, #06b6d4, #3b82f6)' }}
+          {/* MAIN CONTENT CORE */}
+          <div className="relative z-20 flex flex-col items-center">
+            
+            {/* Logo Power-Up */}
+            <div className="relative mb-12">
+              <motion.div
+                initial={{ scale: 0, opacity: 0, rotate: -45 }}
+                animate={{ scale: 1, opacity: 1, rotate: 0 }}
+                transition={{ duration: 1, ease: [0.16, 1, 0.3, 1] }}
+                className="relative z-10 w-24 h-24 rounded-[2rem] bg-gradient-to-br from-cyan-400 via-blue-600 to-indigo-700 p-[2px] shadow-[0_0_50px_rgba(34,211,238,0.4)]"
               >
-                <svg width="32" height="32" viewBox="0 0 24 24" fill="none" stroke="white" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round">
-                  <polyline points="22 12 18 12 15 21 9 3 6 12 2 12"/>
-                </svg>
-              </div>
-            </motion.div>
+                <div className="w-full h-full bg-[#050810] rounded-[calc(2rem-2px)] flex items-center justify-center relative overflow-hidden">
+                   <motion.div 
+                     animate={{ opacity: [0.5, 1, 0.5] }}
+                     transition={{ duration: 1.5, repeat: Infinity }}
+                     className="absolute inset-0 bg-gradient-to-t from-cyan-500/10 to-transparent" 
+                   />
+                   <svg width="40" height="40" viewBox="0 0 24 24" fill="none" className="text-cyan-400">
+                     <motion.path 
+                       d="M22 12h-4l-3 9L9 3l-3 9H2" 
+                       stroke="currentColor" 
+                       strokeWidth="2.5" 
+                       strokeLinecap="round" 
+                       strokeLinejoin="round" 
+                       initial={{ pathLength: 0 }}
+                       animate={{ pathLength: 1 }}
+                       transition={{ duration: 1.5, delay: 0.5, ease: "easeInOut" }}
+                     />
+                   </svg>
+                </div>
+              </motion.div>
+              
+              {/* Logo Glow Ring */}
+              <motion.div 
+                initial={{ scale: 0.8, opacity: 0 }}
+                animate={{ scale: 1.5, opacity: 0 }}
+                transition={{ duration: 2, repeat: Infinity, ease: "easeOut" }}
+                className="absolute inset-0 rounded-[2rem] border border-cyan-500/50 blur-sm"
+              />
+            </div>
 
-            {/* PricePulse title */}
-            <motion.div
-              initial={{ opacity: 0, y: 20 }}
-              animate={{ opacity: 1, y: 0 }}
-              transition={{ duration: 0.5, delay: 0.05 }}
-              className="mb-2"
-            >
-              <h1
-                className="font-black tracking-tight leading-none"
-                style={{
-                  fontSize: 'clamp(2.5rem, 8vw, 5rem)',
-                  background: 'linear-gradient(135deg, #fff 40%, #22d3ee)',
-                  WebkitBackgroundClip: 'text',
-                  WebkitTextFillColor: 'transparent',
-                }}
-              >
-                PricePulse<span style={{ WebkitTextFillColor: '#22d3ee' }}>.</span>
-              </h1>
-              <p
-                className="text-[11px] font-bold uppercase tracking-[0.4em] mt-1"
-                style={{ color: 'rgba(148,163,184,0.7)' }}
-              >
-                Advanced Hyperlocal Intelligence
-              </p>
-            </motion.div>
+            {/* Title with decoding feel */}
+            <div className="text-center mb-16 overflow-hidden">
+               <motion.h1
+                 initial={{ y: 100, opacity: 0 }}
+                 animate={{ y: 0, opacity: 1 }}
+                 transition={{ duration: 0.8, delay: 0.3, ease: [0.16, 1, 0.3, 1] }}
+                 className="text-6xl md:text-8xl font-black tracking-tighter text-white animate-glitch"
+               >
+                 PRICE<span className="text-transparent bg-clip-text bg-gradient-to-r from-cyan-400 to-blue-600 italic">PULSE</span>
+               </motion.h1>
+               <motion.div
+                 initial={{ width: 0 }}
+                 animate={{ width: '100%' }}
+                 transition={{ duration: 1, delay: 1 }}
+                 className="h-[1px] bg-gradient-to-r from-transparent via-cyan-500 to-transparent mx-auto mt-2"
+               />
+               <motion.p
+                 initial={{ opacity: 0 }}
+                 animate={{ opacity: 0.6 }}
+                 transition={{ delay: 1.2 }}
+                 className="text-[10px] font-bold tracking-[0.6em] text-cyan-200 mt-4 uppercase"
+               >
+                 Next-Gen Price Aggregator Node v4.0
+               </motion.p>
+            </div>
 
-            {/* Divider line */}
-            <motion.div
-              initial={{ scaleX: 0 }}
-              animate={{ scaleX: 1 }}
-              transition={{ duration: 0.6, delay: 0.15 }}
-              className="my-6 h-px w-48"
-              style={{ background: 'linear-gradient(90deg, transparent, #22d3ee, transparent)' }}
-            />
-
-            {/* Pokemon Team label */}
-            <motion.p
-              initial={{ opacity: 0 }}
-              animate={{ opacity: 1 }}
-              transition={{ delay: 0.08 }}
-              className="text-[9px] font-black uppercase tracking-[0.5em] mb-5"
-              style={{ color: 'rgba(148,163,184,0.5)' }}
-            >
-              Presented by
-            </motion.p>
-
-            {/* Team members stagger-in */}
-            <div className="flex flex-col gap-3 w-full max-w-xs">
-              {team.map((member) => (
+            {/* High-Power Team Reveal */}
+            <div className="grid grid-cols-1 md:grid-cols-2 gap-4 w-full max-w-2xl px-6">
+              {team.map((member, i) => (
                 <motion.div
                   key={member.name}
-                  initial={{ opacity: 0, x: -30 }}
-                  animate={{ opacity: 1, x: 0 }}
-                  transition={{ duration: 0.45, delay: member.delay, ease: [0.16, 1, 0.3, 1] }}
-                  className="flex items-center justify-between px-5 py-3 rounded-2xl border"
-                  style={{
-                    background: `${member.color}0f`,
-                    borderColor: `${member.color}30`,
-                  }}
+                  initial={{ opacity: 0, x: i % 2 === 0 ? -40 : 40, filter: 'blur(10px)' }}
+                  animate={{ opacity: 1, x: 0, filter: 'blur(0px)' }}
+                  transition={{ duration: 0.6, delay: member.delay, ease: [0.16, 1, 0.3, 1] }}
+                  className="relative group overflow-hidden bg-white/5 border border-white/10 p-4 rounded-2xl backdrop-blur-md hover:bg-white/10 transition-colors"
                 >
-                  <div className="text-left">
-                    <p className="font-black text-white text-sm">{member.name}</p>
-                    <p className="text-[9px] font-bold uppercase tracking-widest" style={{ color: `${member.color}99` }}>
-                      {member.role}
-                    </p>
+                  <div className="absolute top-0 right-0 p-2 opacity-20">
+                    <div className="w-8 h-8 rounded-full border border-white/20" />
                   </div>
-                  <div
-                    className="w-2 h-2 rounded-full"
-                    style={{
-                      background: member.color,
-                      boxShadow: `0 0 8px ${member.color}`,
-                    }}
+                  <p className="text-[9px] font-black uppercase tracking-[0.2em]" style={{ color: member.color }}>
+                    {member.role}
+                  </p>
+                  <h3 className="text-xl font-black text-white mt-1 group-hover:tracking-wider transition-all duration-300">
+                    {member.name}
+                  </h3>
+                  <div 
+                    className="absolute bottom-0 left-0 h-[2px] bg-cyan-500"
+                    style={{ width: '0%', backgroundColor: member.color }}
+                  />
+                  <motion.div 
+                    animate={{ width: ['0%', '100%', '0%'] }}
+                    transition={{ duration: 3, repeat: Infinity, delay: member.delay }}
+                    className="absolute bottom-0 left-0 h-[2px]"
+                    style={{ backgroundColor: member.color, opacity: 0.4 }}
                   />
                 </motion.div>
               ))}
             </div>
 
-            {/* Pokemon Team badge */}
+            {/* Bottom Tech Badge */}
             <motion.div
-              initial={{ opacity: 0, scale: 0.8 }}
-              animate={{ opacity: 1, scale: 1 }}
-              transition={{ delay: 0.75, duration: 0.4 }}
-              className="mt-6 px-4 py-1.5 rounded-full border text-[9px] font-black uppercase tracking-[0.3em]"
-              style={{
-                borderColor: 'rgba(34,211,238,0.3)',
-                color: 'rgba(34,211,238,0.7)',
-                background: 'rgba(34,211,238,0.05)',
-              }}
+              initial={{ opacity: 0, y: 20 }}
+              animate={{ opacity: 1, y: 0 }}
+              transition={{ delay: 2.5 }}
+              className="mt-16 flex items-center gap-3 px-6 py-2 rounded-full border border-white/5 bg-white/5 backdrop-blur-sm"
             >
-              🎮 Pokemon Team
+              <span className="w-2 h-2 rounded-full bg-cyan-500 animate-pulse shadow-[0_0_10px_#06b6d4]" />
+              <p className="text-[10px] font-black uppercase tracking-[0.3em] text-slate-400">
+                Authorized Access Only <span className="text-cyan-500">·</span> POKEMON TEAM
+              </p>
             </motion.div>
           </div>
-
-          {/* Bottom slide-out hint */}
-          <motion.div
-            initial={{ opacity: 0 }}
-            animate={{ opacity: [0, 1, 0] }}
-            transition={{ duration: 1.5, delay: 1.5, repeat: Infinity, repeatDelay: 0 }}
-            className="absolute bottom-10 flex flex-col items-center gap-2"
-            style={{ color: 'rgba(148,163,184,0.4)' }}
-          >
-            <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2">
-              <path d="M12 5v14M5 12l7 7 7-7"/>
-            </svg>
-            <span className="text-[8px] font-bold uppercase tracking-widest">Loading</span>
-          </motion.div>
         </motion.div>
       )}
     </AnimatePresence>
