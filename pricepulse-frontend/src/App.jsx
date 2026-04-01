@@ -1,6 +1,6 @@
 import React, { useEffect } from 'react';
 import { Toaster } from 'react-hot-toast';
-import { motion } from 'framer-motion';
+import { motion, AnimatePresence } from 'framer-motion';
 
 // Context
 import { usePrice } from './context/PriceContext';
@@ -38,15 +38,20 @@ function App() {
   return (
     <div className="min-h-screen bg-slate-50 dark:bg-[#050505] text-slate-800 dark:text-slate-300 font-sans selection:bg-cyan-500/30 overflow-hidden relative transition-colors duration-500">
       {/* Splash intro */}
-      <SplashScreen onDone={() => setSplashDone(true)} />
+      <AnimatePresence>
+        {!splashDone && (
+          <SplashScreen onDone={() => setSplashDone(true)} />
+        )}
+      </AnimatePresence>
 
       {/* Main app — fades in after splash */}
       <motion.div
         initial={{ opacity: 0 }}
         animate={{ opacity: splashDone ? 1 : 0 }}
         transition={{ duration: 0.5 }}
-        style={{ pointerEvents: splashDone ? 'auto' : 'none' }}
+        className="relative z-10"
       >
+
       
       <Toaster 
         position="bottom-center"
