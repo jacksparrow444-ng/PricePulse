@@ -1,10 +1,28 @@
 const db = require('../config/db');
 
 exports.submitPrice = async (req, res) => {
-  const { product_id, product_name, price, location, store_name } = req.body;
+  let { product_id, product_name, price, location, store_name } = req.body;
   const image_path = req.file ? `/uploads/${req.file.filename}` : null;
 
   try {
+    // If no product_id given, try to find existing product by name
+    if (!product_id && product_name) {
+      const [existing] = await db.query(
+        'SELECT id FROM products WHERE name LIKE ? LIMIT 1',
+        [`%${product_name.trim()}%`]
+      );
+      if (existing.length > 0) {
+        product_id = existing[0].id;
+        // also get correct full name
+        const [prod] = await db.query('SELECT name FROM products WHERE id = ? LIMIT 1', [product_id]);
+        if (prod.length > 0) product_name = prod[0].name;
+      } else {
+        // Auto-generate next ID for new product
+        const [[{ next_id }]] = await db.query('SELECT COALESCE(MAX(id), 200) + 1 as next_id FROM products');
+        product_id = next_id;
+      }
+    }
+
     // 1. Auto-register product if it doesn't exist
     await db.query("INSERT IGNORE INTO products (id, name, category) VALUES (?, ?, 'New Entry')", [product_id, product_name]);
 
@@ -12,7 +30,7 @@ exports.submitPrice = async (req, res) => {
     const query = "INSERT INTO price_entries (product_id, product_name, price, location, store_name, image_path) VALUES (?, ?, ?, ?, ?, ?)";
     await db.query(query, [product_id, product_name, price, location, store_name, image_path]);
 
-    res.status(200).json({ message: "Market Data Saved Successfully!" });
+    res.status(200).json({ message: "Market Data Saved Successfully!", product_id });
   } catch (err) {
     console.error("Submission Error:", err);
     res.status(500).json({ error: "Internal Database Error" });
