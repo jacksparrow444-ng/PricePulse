@@ -224,7 +224,7 @@ const AnalyticsDashboard = () => {
               <span className="text-xl font-black text-cyan-600 dark:text-cyan-400 leading-none">{confidenceScore}%</span>
             </div>
           </div>
-          <p className="text-slate-500 dark:text-slate-500 text-[10px] uppercase font-bold tracking-widest mt-2 relative z-10">Data Confidence</p>
+          <p className="text-slate-500 dark:text-slate-500 text-[10px] uppercase font-bold tracking-widest mt-2 relative z-10">Matrix Confidence</p>
         </div>
 
         {analytics.last_image ? (

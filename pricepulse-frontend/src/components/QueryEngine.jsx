@@ -142,27 +142,26 @@ const QueryEngine = () => {
           {ReactDOM.createPortal(dropdown, document.body)}
         </div>
 
-        {/* Recent Searches Pills */}
-        {recentSearches && recentSearches.length > 0 && (
-          <div className="mt-4 flex flex-wrap gap-2">
-            <div className="flex items-center justify-center bg-slate-100 dark:bg-white/5 p-1.5 rounded-full text-slate-400" title="Recent Queries">
-              <History size={12} />
-            </div>
-            {recentSearches.map((rs, i) => (
+        {/* Recent & Trending Pills */}
+        <div className="mt-4 flex flex-wrap gap-2 overflow-hidden max-h-24">
+          <div className="flex items-center gap-1.5 px-3 py-1.5 bg-slate-100 dark:bg-white/5 rounded-xl text-slate-400">
+            <History size={12} />
+          </div>
+          <AnimatePresence>
+            {recentSearches.map((s, i) => (
               <motion.button
-                key={i}
-                initial={{ opacity: 0, scale: 0.8 }}
-                animate={{ opacity: 1, scale: 1 }}
-                transition={{ delay: i * 0.05 }}
-                onClick={() => handleSuggestionClick(rs.id)}
-                className="text-[10px] font-black text-slate-600 dark:text-slate-300 bg-white/50 hover:bg-cyan-50 dark:bg-white/5 dark:hover:bg-cyan-500/20 border border-slate-200 dark:border-white/10 hover:glow-cyan px-3 py-1.5 rounded-full transition-all flex items-center gap-1.5"
+                key={s.id}
+                initial={{ scale: 0.8, opacity: 0 }}
+                animate={{ scale: 1, opacity: 1 }}
+                transition={{ type: "spring", stiffness: 300, damping: 20, delay: i * 0.05 }}
+                onClick={() => handleSuggestionClick(s.id)}
+                className="px-3 py-1.5 bg-white dark:bg-[#161920] border border-slate-200 dark:border-white/10 rounded-xl text-[10px] font-black text-slate-600 dark:text-slate-300 hover:border-cyan-500/50 hover:text-cyan-500 transition-all shadow-sm flex items-center gap-1.5"
               >
-                <span className="truncate max-w-[100px]">{rs.name}</span>
-                <span className="opacity-50 font-mono text-[8px]">#{rs.id}</span>
+                {s.name} <span className="text-[8px] opacity-40 font-mono">#{s.id}</span>
               </motion.button>
             ))}
-          </div>
-        )}
+          </AnimatePresence>
+        </div>
       </motion.div>
 
       {analytics && (
