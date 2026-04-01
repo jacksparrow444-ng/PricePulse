@@ -97,7 +97,8 @@ const DataInjection = () => {
   );
 
   return (
-    <div className="bg-white/90 dark:bg-[#0a0c10]/80 backdrop-blur-2xl border border-cyan-400/40 dark:border-cyan-500/30 rounded-[2rem] p-6 shadow-[0_0_40px_rgba(6,182,212,0.1)] dark:shadow-[0_0_60px_rgba(6,182,212,0.1)] relative transition-all duration-500">
+    <div className="glass-panel rounded-[2rem] p-6 shadow-[0_0_50px_rgba(6,182,212,0.1)] relative transition-all duration-500 overflow-hidden">
+      <div className="absolute top-0 left-0 w-full h-[1px] bg-gradient-to-r from-transparent via-cyan-500/30 to-transparent" />
 
       {/* Header */}
       <div className="flex items-center gap-3 mb-6">
@@ -139,10 +140,10 @@ const DataInjection = () => {
               value={formData.product_name || ''}
               onChange={handleNameChange}
               onFocus={() => { setShowSug(true); updatePos(); }}
-              className={`w-full bg-slate-50 dark:bg-[#161920] border rounded-2xl px-4 py-3 outline-none text-sm text-slate-900 dark:text-white placeholder-slate-400 focus:ring-2 transition-all ${
+              className={`w-full bg-slate-50 dark:bg-white/5 border rounded-2xl px-4 py-3.5 outline-none text-sm font-bold text-slate-800 dark:text-white placeholder-slate-400 transition-all ${
                 selectedProduct
-                  ? 'border-emerald-400 focus:border-emerald-500 focus:ring-emerald-500/10'
-                  : 'border-slate-200 dark:border-white/5 focus:border-cyan-500 focus:ring-cyan-500/10'
+                  ? 'border-emerald-400 focus:glow-cyan'
+                  : 'border-slate-200 dark:border-white/10 focus:border-cyan-500 focus:glow-cyan'
               }`}
             />
             {selectedProduct && (
@@ -166,7 +167,7 @@ const DataInjection = () => {
             placeholder="0.00"
             value={formData.price}
             onChange={(e) => setFormData({ ...formData, price: e.target.value })}
-            className="w-full bg-slate-50 dark:bg-[#161920] border border-slate-200 dark:border-white/5 rounded-2xl px-4 py-3 outline-none text-sm text-cyan-600 dark:text-cyan-400 font-mono font-bold placeholder-slate-400 focus:border-cyan-500 focus:ring-2 focus:ring-cyan-500/10 transition-all"
+            className="w-full bg-slate-50 dark:bg-white/5 border border-slate-200 dark:border-white/10 rounded-2xl px-4 py-3.5 outline-none text-sm text-cyan-600 dark:text-cyan-400 font-mono font-black placeholder-slate-400 focus:border-cyan-500 focus:glow-cyan transition-all"
           />
         </div>
 
@@ -231,11 +232,11 @@ const DataInjection = () => {
         <button
           type="submit"
           disabled={isSubmitting || !formData.product_name}
-          className="w-full mt-2 bg-cyan-500 hover:bg-cyan-600 text-white py-3.5 rounded-2xl font-black text-xs uppercase tracking-[0.15em] shadow-lg shadow-cyan-500/30 transition-all disabled:opacity-50 flex justify-center items-center gap-2"
+          className="w-full mt-2 bg-gradient-to-r from-cyan-500 to-blue-600 hover:scale-[1.02] active:scale-95 text-white py-4 rounded-2xl font-black text-xs uppercase tracking-[0.2em] shadow-lg shadow-cyan-500/30 transition-all disabled:opacity-50 flex justify-center items-center gap-2 group"
         >
           {isSubmitting
-            ? <><Loader2 size={15} className="animate-spin" /> Submitting...</>
-            : <><PlusCircle size={15} /> Submit Price</>
+            ? <><Loader2 size={16} className="animate-spin" /> Processing Transmission...</>
+            : <><PlusCircle size={16} className="group-hover:rotate-90 transition-transform" /> Inject Price Entry</>
           }
         </button>
 

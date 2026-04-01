@@ -23,15 +23,22 @@ const Header = () => {
       className="flex justify-between items-center mb-12 relative z-50"
     >
       <div className="flex items-center gap-4">
-        <div className="relative flex items-center justify-center w-12 h-12 bg-gradient-to-br from-cyan-400 to-purple-600 rounded-2xl shadow-[0_0_30px_rgba(34,211,238,0.2)]">
+        <div className="relative flex items-center justify-center w-12 h-12 bg-gradient-to-br from-cyan-400 to-purple-600 rounded-2xl shadow-[0_0_40px_rgba(34,211,238,0.3)] group-hover:scale-105 transition-transform">
           <Activity className="text-white z-10" size={24} />
-          <div className="absolute inset-0 bg-white/20 rounded-2xl animate-pulse opacity-20"></div>
+          <motion.div 
+            animate={{ scale: [1, 1.2, 1], opacity: [0.1, 0.3, 0.1] }}
+            transition={{ duration: 2, repeat: Infinity }}
+            className="absolute inset-0 bg-white rounded-2xl"
+          />
         </div>
         <div>
           <h1 className="text-2xl font-black bg-clip-text text-transparent bg-gradient-to-r from-cyan-400 to-purple-500 tracking-tight animate-glitch relative inline-block">
             PricePulse <span className="text-cyan-500">.</span>
           </h1>
-          <p className="text-[9px] font-bold uppercase tracking-[0.3em] text-slate-500 mt-0.5">Advanced Hyperlocal Intelligence</p>
+          <div className="flex items-center gap-2 mt-0.5">
+            <span className="w-1.5 h-1.5 rounded-full bg-cyan-500 animate-pulse shadow-[0_0_8px_#06b6d4]" />
+            <p className="text-[9px] font-black uppercase tracking-[0.3em] text-slate-500 dark:text-slate-400">Hyperlocal Intelligence Node v4.0</p>
+          </div>
         </div>
       </div>
 
@@ -66,13 +73,16 @@ const Header = () => {
 
         <button
           onClick={toggleTheme}
-          className="p-2.5 bg-white/60 dark:bg-white/5 border border-slate-200 dark:border-white/10 rounded-full hover:bg-white dark:hover:bg-white/10 transition-colors backdrop-blur-md text-slate-500"
+          className="p-2.5 glass-panel rounded-full hover:glow-cyan transition-all group active:scale-95"
         >
-          {theme === 'dark' ? <Sun size={18} className="text-amber-400" /> : <Moon size={18} className="text-indigo-600" />}
+          {theme === 'dark' ? 
+            <Sun size={18} className="text-amber-400 group-hover:rotate-45 transition-transform" /> : 
+            <Moon size={18} className="text-indigo-600 group-hover:-rotate-12 transition-transform" />
+          }
         </button>
 
-        <button className="p-2.5 bg-white/60 dark:bg-white/5 border border-slate-200 dark:border-white/10 rounded-full hover:bg-white dark:hover:bg-white/10 transition-colors backdrop-blur-md">
-          <Settings2 strokeWidth={1.5} size={18} className="text-slate-500" />
+        <button className="p-2.5 glass-panel rounded-full hover:glow-purple transition-all group active:scale-95">
+          <Settings2 strokeWidth={1.5} size={18} className="text-slate-500 group-hover:rotate-90 transition-transform duration-500" />
         </button>
       </div>
     </motion.header>

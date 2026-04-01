@@ -48,10 +48,41 @@ function App() {
       <motion.div
         initial={{ opacity: 0 }}
         animate={{ opacity: splashDone ? 1 : 0 }}
-        transition={{ duration: 0.5 }}
+        transition={{ duration: 0.8 }}
         className="relative z-10"
       >
+        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8 md:py-12 relative">
+          <Header />
+          
+          <div className="grid grid-cols-1 lg:grid-cols-12 gap-8 items-start">
+            {/* Left Column: Input & Controls */}
+            <motion.div 
+              initial={{ y: 20, opacity: 0 }}
+              animate={splashDone ? { y: 0, opacity: 1 } : {}}
+              transition={{ delay: 0.2, duration: 0.8 }}
+              className="lg:col-span-4 space-y-8"
+            >
+              <QueryEngine />
+              <DataInjection />
+            </motion.div>
 
+            {/* Right Column: Insights & Ledger */}
+            <motion.div 
+              initial={{ y: 20, opacity: 0 }}
+              animate={splashDone ? { y: 0, opacity: 1 } : {}}
+              transition={{ delay: 0.4, duration: 0.8 }}
+              className="lg:col-span-8 space-y-8"
+            >
+              <AnalyticsDashboard />
+              <div className="grid grid-cols-1 xl:grid-cols-2 gap-8">
+                <VolatilityChart />
+                <NodeLedger />
+              </div>
+            </motion.div>
+          </div>
+
+          <Footer />
+        </div>
       
       <Toaster 
         position="bottom-center"

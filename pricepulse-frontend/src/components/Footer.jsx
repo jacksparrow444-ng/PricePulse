@@ -6,8 +6,8 @@ const Footer = () => {
   const [showHelp, setShowHelp] = useState(false);
 
   return (
-    <footer className="mt-12 bg-white/40 dark:bg-[#0f1115]/40 backdrop-blur-2xl border border-slate-200/60 dark:border-white/5 rounded-[2.5rem] p-8 md:p-10 shadow-[0_8px_30px_rgb(0,0,0,0.04)] dark:shadow-2xl relative overflow-visible group transition-colors duration-500">
-      <div className="absolute top-0 left-0 w-full h-[2px] bg-gradient-to-r from-transparent via-cyan-500/50 to-transparent"></div>
+    <footer className="mt-12 glass-panel rounded-[2.5rem] p-8 md:p-10 shadow-[0_0_50px_rgba(6,182,212,0.1)] relative overflow-visible group transition-colors duration-500">
+      <div className="absolute top-0 left-0 w-full h-[1px] bg-gradient-to-r from-transparent via-cyan-500/30 to-transparent"></div>
       
       <div className="relative z-10 flex flex-col md:flex-row items-center justify-between gap-8">
         
@@ -34,40 +34,40 @@ const Footer = () => {
           <div className="grid grid-cols-2 lg:flex lg:flex-row gap-4 md:gap-8 border-r-0 lg:border-r border-slate-200 dark:border-white/10 pr-0 lg:pr-8">
             {/* Team Leader */}
             <motion.div 
-              initial={{ opacity: 0, y: 20 }}
-              whileInView={{ opacity: 1, y: 0 }}
+              initial={{ opacity: 0, scale: 0.9 }}
+              whileInView={{ opacity: 1, scale: 1 }}
               viewport={{ once: true }}
-              whileHover={{ scale: 1.05 }} 
-              className="flex items-center gap-3 bg-white/60 dark:bg-[#161920]/80 p-3 md:p-4 rounded-2xl border border-slate-100 dark:border-white/5 hover:border-cyan-500/50 hover:shadow-[0_0_20px_rgba(34,211,238,0.2)] transition-all cursor-crosshair"
+              whileHover={{ scale: 1.02 }} 
+              className="flex items-center gap-3 bg-[#0c0f16]/40 dark:bg-[#0c0f16]/60 p-4 rounded-2xl border border-white/5 hover:glow-cyan transition-all cursor-crosshair group/item"
             >
-              <div className="w-10 h-10 rounded-full bg-cyan-100 dark:bg-cyan-500/10 flex items-center justify-center text-cyan-600 dark:text-cyan-400">
-                <Crown size={18} strokeWidth={2.5} />
+              <div className="w-10 h-10 rounded-xl bg-cyan-500/10 flex items-center justify-center text-cyan-400 border border-cyan-500/20">
+                <Crown size={18} strokeWidth={2.5} className="group-hover/item:rotate-12 transition-transform" />
               </div>
               <div>
-                <p className="text-[9px] uppercase tracking-wider font-bold text-slate-400">Team Leader</p>
-                <p className="text-sm font-black text-slate-800 dark:text-white bg-clip-text hover:text-transparent hover:bg-gradient-to-r hover:from-cyan-500 hover:to-blue-500 transition-colors">Nirmal Kumar</p>
+                <p className="text-[8px] uppercase tracking-widest font-black text-cyan-500/60">Architect / Lead</p>
+                <p className="text-sm font-black text-slate-800 dark:text-white">Nirmal Kumar</p>
               </div>
             </motion.div>
 
             {/* Members */}
             <div className="flex flex-col gap-3 justify-center">
               {[
-                { role: "Dev", name: "Tanishq", icon: <Code2 size={14}/>, color: "text-blue-500", groupColor: "group-hover:text-blue-500" },
-                { role: "Design", name: "Taniya Singla", icon: <PenTool size={14}/>, color: "text-pink-500", groupColor: "group-hover:text-pink-500" },
-                { role: "Test", name: "Tanisha Dua", icon: <BugPlay size={14}/>, color: "text-emerald-500", groupColor: "group-hover:text-emerald-500" }
+                { role: "Systems Eng.", name: "Tanishq", icon: <Code2 size={14}/>, color: "text-blue-400", hoverGlow: "hover:glow-cyan" },
+                { role: "UX Visionary", name: "Taniya Singla", icon: <PenTool size={14}/>, color: "text-pink-400", hoverGlow: "hover:glow-purple" },
+                { role: "Security & Q", name: "Tanisha Dua", icon: <BugPlay size={14}/>, color: "text-emerald-400", hoverGlow: "hover:border-emerald-500/50" }
               ].map((member, i) => (
                 <motion.div 
                   key={i}
-                  initial={{ opacity: 0, x: 20 }}
+                  initial={{ opacity: 0, x: 10 }}
                   whileInView={{ opacity: 1, x: 0 }}
                   viewport={{ once: true }}
-                  transition={{ delay: i * 0.15 }}
+                  transition={{ delay: 0.1 * i }}
                   whileHover={{ x: 5 }} 
-                  className="flex items-center gap-2 group cursor-pointer"
+                  className={`flex items-center gap-2 group cursor-pointer bg-black/5 dark:bg-white/5 px-3 py-1.5 rounded-lg border border-transparent transition-all ${member.hoverGlow}`}
                 >
                   <span className={`${member.color} group-hover:scale-110 transition-transform`}>{member.icon}</span>
-                  <p className={`text-xs font-semibold text-slate-700 dark:text-slate-300 ${member.groupColor} transition-colors`}>
-                    <span className="text-slate-400 dark:text-slate-500 font-medium">{member.role}:</span> {member.name}
+                  <p className={`text-[10px] font-bold text-slate-600 dark:text-slate-400`}>
+                    <span className="opacity-50 font-medium tracking-tight">{member.role}:</span> {member.name}
                   </p>
                 </motion.div>
               ))}

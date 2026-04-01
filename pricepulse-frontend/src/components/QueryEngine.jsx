@@ -105,10 +105,10 @@ const QueryEngine = () => {
   return (
     <div className="space-y-6">
       <motion.div
-        whileHover={{ scale: 1.01 }}
-        className="bg-white/90 dark:bg-[#0a0c10]/80 backdrop-blur-2xl border border-cyan-400/40 dark:border-cyan-500/30 rounded-[2rem] p-6 shadow-[0_0_40px_rgba(6,182,212,0.2)] dark:shadow-[0_0_60px_rgba(6,182,212,0.15)] relative group transition-all duration-500"
+        whileHover={{ scale: 1.005 }}
+        className="glass-panel rounded-[2rem] p-6 shadow-[0_0_50px_rgba(6,182,212,0.15)] relative group transition-all duration-500"
       >
-        <div className="absolute top-0 left-0 w-full h-1 bg-gradient-to-r from-transparent via-cyan-500 to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-1000 rounded-t-[2rem]" />
+        <div className="absolute top-0 left-0 w-full h-1 bg-gradient-to-r from-transparent via-cyan-500/50 to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-1000 rounded-t-[2rem]" />
 
         <h3 className="text-[11px] font-black uppercase tracking-widest text-slate-500 dark:text-slate-400 mb-5 flex items-center gap-2">
           <Search size={14} className="text-cyan-500 animate-pulse" />
@@ -126,7 +126,7 @@ const QueryEngine = () => {
               onChange={(e) => { setSearchId(e.target.value); setShowSuggestions(true); updateDropdownPosition(); }}
               onFocus={() => { setShowSuggestions(true); updateDropdownPosition(); }}
               placeholder="Search Product ID or Name..."
-              className="w-full bg-slate-50 border border-slate-200 focus:border-cyan-500 rounded-2xl py-4 pl-5 pr-14 outline-none text-sm font-medium text-slate-900 placeholder-slate-400 dark:bg-[#161920] dark:border-white/5 dark:focus:border-cyan-500/50 dark:text-white dark:placeholder-slate-600 transition-all font-mono shadow-inner"
+              className="w-full bg-slate-50 border border-slate-200 focus:border-cyan-500 focus:glow-cyan rounded-2xl py-4 pl-5 pr-14 outline-none text-sm font-bold text-slate-800 placeholder-slate-400 dark:bg-[#161920] dark:border-white/5 dark:focus:border-cyan-500/50 dark:text-white dark:placeholder-slate-600 transition-all font-mono shadow-inner"
             />
             <button
               type="button"
@@ -149,14 +149,17 @@ const QueryEngine = () => {
               <History size={12} />
             </div>
             {recentSearches.map((rs, i) => (
-              <button
+              <motion.button
                 key={i}
+                initial={{ opacity: 0, scale: 0.8 }}
+                animate={{ opacity: 1, scale: 1 }}
+                transition={{ delay: i * 0.05 }}
                 onClick={() => handleSuggestionClick(rs.id)}
-                className="text-[10px] font-bold text-slate-600 dark:text-slate-300 bg-slate-50 hover:bg-cyan-50 dark:bg-white/5 dark:hover:bg-cyan-500/20 border border-slate-200 dark:border-white/10 hover:border-cyan-300 dark:hover:border-cyan-500/50 px-3 py-1.5 rounded-full transition-all flex items-center gap-1.5"
+                className="text-[10px] font-black text-slate-600 dark:text-slate-300 bg-white/50 hover:bg-cyan-50 dark:bg-white/5 dark:hover:bg-cyan-500/20 border border-slate-200 dark:border-white/10 hover:glow-cyan px-3 py-1.5 rounded-full transition-all flex items-center gap-1.5"
               >
                 <span className="truncate max-w-[100px]">{rs.name}</span>
-                <span className="opacity-50">#{rs.id}</span>
-              </button>
+                <span className="opacity-50 font-mono text-[8px]">#{rs.id}</span>
+              </motion.button>
             ))}
           </div>
         )}

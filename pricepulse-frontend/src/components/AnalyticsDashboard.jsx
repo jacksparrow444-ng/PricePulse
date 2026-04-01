@@ -141,8 +141,8 @@ const AnalyticsDashboard = () => {
 
   return (
     <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
-      <div className="md:col-span-2 bg-gradient-to-br from-white/90 to-slate-50/90 border-cyan-400/40 dark:from-[#0a0c10]/80 dark:to-[#161920]/80 p-8 rounded-[2.5rem] border dark:border-cyan-500/30 relative overflow-hidden group shadow-[0_0_40px_rgba(6,182,212,0.15)] dark:shadow-[0_0_60px_rgba(6,182,212,0.15)] transition-colors duration-500 backdrop-blur-3xl">
-        <div className="absolute -right-20 -top-20 w-64 h-64 bg-cyan-400/10 blur-[80px] rounded-full group-hover:bg-cyan-500/15 transition-colors duration-1000"></div>
+      <div className="md:col-span-2 glass-panel p-8 rounded-[2.5rem] relative overflow-hidden group shadow-[0_0_50px_rgba(6,182,212,0.15)] transition-all duration-500 backdrop-blur-3xl">
+        <div className="absolute -right-20 -top-20 w-80 h-80 bg-cyan-400/10 blur-[100px] rounded-full group-hover:bg-cyan-500/15 transition-colors duration-1000"></div>
 
         <div className="flex justify-between items-start mb-4 relative z-10 flex-wrap gap-2">
           <p className="font-bold text-[10px] uppercase tracking-widest flex items-center gap-2 border border-emerald-200 dark:border-emerald-500/20 bg-emerald-50 dark:bg-emerald-500/10 text-emerald-700 dark:text-emerald-400 px-3 py-1.5 rounded-full backdrop-blur-sm">
@@ -164,9 +164,9 @@ const AnalyticsDashboard = () => {
 
         {/* Price block */}
         <div className="relative z-10 mb-3">
-          <h2 className="text-6xl sm:text-7xl lg:text-[6.5rem] font-black text-slate-800 dark:text-white tracking-tighter leading-none flex items-start">
+          <h2 className="text-6xl sm:text-7xl lg:text-[6.5rem] font-black text-slate-800 dark:text-white tracking-tighter leading-none flex items-start animate-in fade-in slide-in-from-left-4 duration-1000">
             <span className="text-cyan-500 text-3xl sm:text-4xl lg:text-5xl pr-2 translate-y-2">₹</span>
-            <span className="tabular-nums">{parseFloat(analytics.average_price).toFixed(2)}</span>
+            <span className="tabular-nums drop-shadow-[0_0_30px_rgba(34,211,238,0.3)]">{parseFloat(analytics.average_price).toFixed(2)}</span>
           </h2>
         </div>
 
@@ -200,9 +200,9 @@ const AnalyticsDashboard = () => {
       </div>
 
       <div className="flex flex-col gap-4">
-        <div className="bg-white dark:bg-[#0f1115] p-6 rounded-[2rem] border border-slate-200/60 dark:border-white/5 flex-1 flex flex-col justify-center relative overflow-hidden items-center group shadow-[0_8px_30px_rgb(0,0,0,0.04)] dark:shadow-2xl transition-colors duration-500">
+        <div className="glass-panel p-6 rounded-[2rem] flex-1 flex flex-col justify-center relative overflow-hidden items-center group shadow-[0_0_30px_rgba(34,211,238,0.05)] transition-all duration-500">
           <div className="absolute right-0 top-0 w-32 h-32 bg-purple-400/10 blur-[40px] rounded-full"></div>
-          <div className="relative" style={{ width: 112, height: 112 }}>
+          <div className="relative hover:scale-105 transition-transform" style={{ width: 112, height: 112 }}>
             <PieChart width={112} height={112}>
               <Pie
                 data={pieData}
@@ -228,12 +228,12 @@ const AnalyticsDashboard = () => {
         </div>
 
         {analytics.last_image ? (
-          <div className="bg-slate-100 dark:bg-[#0f1115] p-6 rounded-[2rem] border border-slate-200/60 dark:border-white/5 flex-1 relative overflow-hidden group cursor-pointer min-h-[120px] shadow-[0_8px_30px_rgb(0,0,0,0.04)] transition-colors duration-500">
-            <img src={`${IMAGE_BASE}${analytics.last_image}`} className="absolute inset-0 w-full h-full object-cover opacity-60 dark:opacity-30 group-hover:opacity-80 transition-opacity mix-blend-multiply dark:mix-blend-luminosity duration-500" alt="Evidence" />
-            <div className="absolute inset-0 bg-gradient-to-t from-white via-white/80 to-transparent dark:from-[#0f1115] dark:via-[#0f1115]/80"></div>
+          <div className="glass-panel p-6 rounded-[2rem] flex-1 relative overflow-hidden group cursor-pointer min-h-[120px] shadow-sm transition-all duration-500">
+            <img src={`${IMAGE_BASE}${analytics.last_image}`} className="absolute inset-0 w-full h-full object-cover opacity-50 dark:opacity-20 group-hover:scale-110 transition-transform duration-1000" alt="Evidence" />
+            <div className="absolute inset-0 bg-gradient-to-t from-white via-white/80 to-transparent dark:from-[#0f1115] dark:via-[#0f1115]/60"></div>
             <div className="relative z-10 h-full flex flex-col justify-end">
-              <p className="text-slate-700 dark:text-slate-400 text-[10px] uppercase font-bold tracking-widest flex items-center gap-1.5 bg-white/80 dark:bg-black/50 backdrop-blur-md px-3 py-1.5 rounded-full w-fit shadow-sm">
-                <ImageIcon size={12} /> Last Node Evidence
+              <p className="text-slate-800 dark:text-slate-300 text-[9px] uppercase font-black tracking-[0.2em] flex items-center gap-1.5 bg-white/40 dark:bg-black/30 backdrop-blur-md px-3 py-1.5 rounded-full w-fit border border-white/20">
+                <ImageIcon size={12} className="text-cyan-500" /> Valid Node Proof
               </p>
             </div>
           </div>
