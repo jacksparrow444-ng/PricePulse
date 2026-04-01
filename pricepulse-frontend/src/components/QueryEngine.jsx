@@ -47,10 +47,10 @@ const QueryEngine = () => {
   };
 
   return (
-    <div className="space-y-6">
+    <div className="space-y-6 relative z-50">
       <motion.div 
-        whileHover={{ scale: 1.01, zIndex: 10 }}
-        className="bg-white/90 dark:bg-[#0a0c10]/80 backdrop-blur-2xl border border-cyan-400/40 dark:border-cyan-500/30 rounded-[2rem] p-6 shadow-[0_0_40px_rgba(6,182,212,0.2)] dark:shadow-[0_0_60px_rgba(6,182,212,0.15)] relative overflow-visible group transition-all duration-500"
+        whileHover={{ scale: 1.01 }}
+        className="bg-white/90 dark:bg-[#0a0c10]/80 backdrop-blur-2xl border border-cyan-400/40 dark:border-cyan-500/30 rounded-[2rem] p-6 shadow-[0_0_40px_rgba(6,182,212,0.2)] dark:shadow-[0_0_60px_rgba(6,182,212,0.15)] relative group transition-all duration-500"
       >
         <div className="absolute top-0 left-0 w-full h-1 bg-gradient-to-r from-transparent via-cyan-500 to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-1000 rounded-t-[2rem]"></div>
 

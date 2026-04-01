@@ -80,7 +80,7 @@ function App() {
           className="grid grid-cols-1 lg:grid-cols-12 gap-8"
         >
           {/* Left Column Controls */}
-          <motion.div variants={itemVariants} className="lg:col-span-4 space-y-6">
+          <motion.div variants={itemVariants} className="lg:col-span-4 space-y-6 relative z-50">
             <QueryEngine />
             <DataInjection />
 
