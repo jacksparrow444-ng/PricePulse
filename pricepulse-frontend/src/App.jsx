@@ -26,13 +26,13 @@ function App() {
   }, []);
 
   const pageVariants = {
-    initial: { opacity: 0, y: 20 },
-    animate: { opacity: 1, y: 0, transition: { duration: 0.5, staggerChildren: 0.1 } }
+    initial: { opacity: 0, y: 16 },
+    animate: { opacity: 1, y: 0, transition: { duration: 0.45, ease: [0.16, 1, 0.3, 1], staggerChildren: 0.08 } }
   };
 
   const itemVariants = {
-    initial: { opacity: 0, y: 20 },
-    animate: { opacity: 1, y: 0 }
+    initial: { opacity: 0, y: 16 },
+    animate: { opacity: 1, y: 0, transition: { duration: 0.45, ease: [0.16, 1, 0.3, 1] } }
   };
 
   return (
@@ -104,7 +104,13 @@ function App() {
           {/* Right Column Analytics */}
           <motion.div variants={itemVariants} className="lg:col-span-8 flex flex-col h-full">
             {analytics ? (
-              <motion.div initial={{ opacity: 0, scale: 0.95 }} animate={{ opacity: 1, scale: 1 }} className="space-y-6 flex-1">
+              <motion.div
+                key={analytics.product_id || 'analytics'}
+                initial={{ opacity: 0, y: 20, scale: 0.98 }}
+                animate={{ opacity: 1, y: 0, scale: 1 }}
+                transition={{ duration: 0.4, ease: [0.16, 1, 0.3, 1] }}
+                className="space-y-6 flex-1"
+              >
                 <AnalyticsDashboard />
                 <div className="grid grid-cols-1 lg:grid-cols-3 gap-6">
                   <VolatilityChart />
