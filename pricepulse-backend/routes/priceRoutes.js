@@ -7,5 +7,6 @@ router.post('/submit-price', upload.single('image'), priceController.submitPrice
 router.get('/analytics/:id', priceController.getAnalytics);
 router.get('/system-stats', priceController.getSystemStats);
 router.get('/suggestions', priceController.getSuggestions);
+router.get('/product/:id', priceController.getProductById);
 
 module.exports = router;

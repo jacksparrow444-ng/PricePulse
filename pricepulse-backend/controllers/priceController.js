@@ -114,14 +114,29 @@ exports.getSuggestions = async (req, res) => {
     const query = `
       SELECT DISTINCT p.id, p.name, p.category 
       FROM products p
-      INNER JOIN price_entries pe ON p.id = pe.product_id
-      WHERE p.name LIKE ? OR p.id LIKE ?
-      LIMIT 8
+      WHERE p.name LIKE ? OR CAST(p.id AS CHAR) LIKE ?
+      ORDER BY p.id ASC
+      LIMIT 10
     `;
     const [results] = await db.query(query, [`%${q}%`, `%${q}%`]);
     res.json(results);
   } catch (err) {
     console.error("Suggestions Error:", err);
     res.status(500).json({ error: "Server Error" });
+  }
+};
+
+exports.getProductById = async (req, res) => {
+  const { id } = req.params;
+  try {
+    const [rows] = await db.query(
+      'SELECT id, name, category FROM products WHERE id = ? LIMIT 1',
+      [id]
+    );
+    if (rows.length === 0) return res.json(null);
+    res.json(rows[0]);
+  } catch (err) {
+    console.error('Product lookup error:', err);
+    res.status(500).json({ error: 'Server Error' });
   }
 };
