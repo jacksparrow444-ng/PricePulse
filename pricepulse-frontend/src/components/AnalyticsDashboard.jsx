@@ -162,20 +162,27 @@ const AnalyticsDashboard = () => {
 
         <h3 className="text-2xl font-black text-slate-900 dark:text-white mb-3 tracking-tight relative z-10">{analytics.product_name}</h3>
 
-        <div className="flex flex-col md:flex-row md:items-end gap-4 md:gap-8 relative z-10">
-          <h2 className="text-7xl md:text-[8rem] font-black text-slate-800 dark:text-white tracking-tighter leading-none flex items-start">
-            <span className="text-cyan-500 text-4xl md:text-6xl pr-2 translate-y-2 md:translate-y-4">₹</span>
+        {/* Price block */}
+        <div className="relative z-10 mb-3">
+          <h2 className="text-6xl sm:text-7xl lg:text-[6.5rem] font-black text-slate-800 dark:text-white tracking-tighter leading-none flex items-start">
+            <span className="text-cyan-500 text-3xl sm:text-4xl lg:text-5xl pr-2 translate-y-2">₹</span>
             <span className="tabular-nums">{parseFloat(analytics.average_price).toFixed(2)}</span>
           </h2>
-          <div className="pb-2 md:pb-4 relative group cursor-help mt-2 md:mt-0">
-            <p className="text-[10px] md:text-xs uppercase font-bold text-slate-400 dark:text-slate-500 tracking-widest mb-1 flex items-center gap-1">
-              Optimal Range <Info size={12} className="text-slate-300 dark:text-slate-400" />
-            </p>
-            <p className="text-xl md:text-2xl font-black text-slate-600 dark:text-slate-300 bg-slate-100/50 dark:bg-slate-800/20 px-4 py-2 rounded-xl inline-block shadow-sm">
-              <span className="tabular-nums">₹ {parseFloat(analytics.fair_range.low).toFixed(2)}</span>
-              <span className="text-slate-400 dark:text-slate-600 font-light mx-1">-</span>
-              <span className="tabular-nums">₹ {parseFloat(analytics.fair_range.high).toFixed(2)}</span>
-            </p>
+        </div>
+
+        {/* Optimal Range — always fully visible below price */}
+        <div className="relative z-10 mb-2">
+          <p className="text-[10px] uppercase font-bold text-slate-400 dark:text-slate-500 tracking-widest mb-1.5 flex items-center gap-1">
+            Optimal Range <Info size={11} className="text-slate-300 dark:text-slate-500" />
+          </p>
+          <div className="flex items-center gap-2 flex-wrap">
+            <span className="bg-emerald-50 dark:bg-emerald-500/10 border border-emerald-200 dark:border-emerald-500/20 text-emerald-700 dark:text-emerald-400 text-sm font-black px-3 py-1.5 rounded-xl tabular-nums">
+              ₹ {parseFloat(analytics.fair_range.low).toFixed(2)}
+            </span>
+            <span className="text-slate-400 dark:text-slate-600 font-light text-lg">—</span>
+            <span className="bg-rose-50 dark:bg-rose-500/10 border border-rose-200 dark:border-rose-500/20 text-rose-600 dark:text-rose-400 text-sm font-black px-3 py-1.5 rounded-xl tabular-nums">
+              ₹ {parseFloat(analytics.fair_range.high).toFixed(2)}
+            </span>
           </div>
         </div>
 
