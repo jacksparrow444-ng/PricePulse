@@ -1,25 +1,8 @@
-import React, { useEffect, useRef } from 'react';
-import { motion, animate } from 'framer-motion';
+import React from 'react';
 import { ShieldCheck, Info, Image as ImageIcon, DownloadCloud } from 'lucide-react';
 import { PieChart, Pie, Cell, ResponsiveContainer } from 'recharts';
 import { usePrice } from '../context/PriceContext';
 
-const AnimatedNumber = ({ value, prefix = '', suffix = '', decimals = 0 }) => {
-  const nodeRef = useRef(null);
-  useEffect(() => {
-    const node = nodeRef.current;
-    if (!node) return;
-    const controls = animate(0, parseFloat(value) || 0, {
-      duration: 1.5,
-      ease: "easeOut",
-      onUpdate(v) {
-        node.textContent = `${prefix}${v.toFixed(decimals)}${suffix}`;
-      }
-    });
-    return () => controls.stop();
-  }, [value, prefix, suffix, decimals]);
-  return <span ref={nodeRef} className="tabular-nums">{prefix}{parseFloat(value || 0).toFixed(decimals)}{suffix}</span>;
-};
 
 const AnalyticsDashboard = () => {
   const { analytics, searchId, IMAGE_BASE, theme } = usePrice();
@@ -183,14 +166,14 @@ const AnalyticsDashboard = () => {
         <div className="flex flex-col md:flex-row md:items-end gap-4 md:gap-8 relative z-10">
           <h2 className="text-7xl md:text-[8rem] font-black text-slate-800 dark:text-white tracking-tighter leading-none flex items-start">
             <span className="text-cyan-500 text-4xl md:text-6xl pr-2 translate-y-2 md:translate-y-4">₹</span>
-            <AnimatedNumber value={analytics.average_price} decimals={2} />
+            <span className="tabular-nums">{parseFloat(analytics.average_price).toFixed(2)}</span>
           </h2>
           <div className="pb-2 md:pb-4 relative group cursor-help mt-2 md:mt-0">
             <p className="text-[10px] md:text-xs uppercase font-bold text-slate-400 dark:text-slate-500 tracking-widest mb-1 flex items-center gap-1">
               Optimal Range <Info size={12} className="text-slate-300 dark:text-slate-400" />
             </p>
             <p className="text-xl md:text-2xl font-black text-slate-600 dark:text-slate-300 bg-slate-100/50 dark:bg-slate-800/20 px-4 py-2 rounded-xl inline-block shadow-sm">
-              <AnimatedNumber value={analytics.fair_range.low} prefix="₹ " decimals={2} /> <span className="text-slate-400 dark:text-slate-600 font-light mx-1">-</span> <AnimatedNumber value={analytics.fair_range.high} prefix="₹ " decimals={2} />
+              <span className="tabular-nums">₹ {parseFloat(analytics.fair_range.low).toFixed(2)}</span> <span className="text-slate-400 dark:text-slate-600 font-light mx-1">-</span> <span className="tabular-nums">₹ {parseFloat(analytics.fair_range.high).toFixed(2)}</span>
             </p>
           </div>
         </div>
@@ -198,7 +181,7 @@ const AnalyticsDashboard = () => {
         <div className="mt-8 pt-6 border-t border-slate-100 dark:border-white/10 flex flex-col md:flex-row items-start md:items-center justify-between gap-4 relative z-10">
           <p className="text-xs font-medium text-slate-500 dark:text-slate-400 flex items-center gap-2">
             <span className="w-2 h-2 rounded-full bg-cyan-500 animate-pulse"></span>
-            Verified across <strong className="text-slate-800 dark:text-white mx-1"><AnimatedNumber value={analytics.total_samples} /> nodes</strong>
+            Verified across <strong className="text-slate-800 dark:text-white mx-1">{analytics.total_samples} nodes</strong>
           </p>
           <div className={`px-3 py-1.5 rounded-full border ${marketClassification.border} ${marketClassification.bg} relative group cursor-help transition-colors`}>
             <p className={`text-[10px] font-black uppercase tracking-widest ${marketClassification.color}`}>
@@ -224,7 +207,7 @@ const AnalyticsDashboard = () => {
               </PieChart>
             </ResponsiveContainer>
             <div className="absolute inset-0 flex flex-col items-center justify-center">
-              <span className="text-xl font-black text-cyan-600 leading-none"><AnimatedNumber value={confidenceScore} suffix="%" /></span>
+              <span className="text-xl font-black text-cyan-600 leading-none">{confidenceScore}%</span>
             </div>
           </div>
           <p className="text-slate-500 dark:text-slate-500 text-[10px] uppercase font-bold tracking-widest mt-2 relative z-10">Data Confidence</p>
