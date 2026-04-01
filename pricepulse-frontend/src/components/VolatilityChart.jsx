@@ -48,14 +48,14 @@ const VolatilityChart = () => {
           <div className="text-left">
             <p className="text-[8px] uppercase font-bold text-slate-400 tracking-widest">Stability</p>
             <p className="font-mono text-[11px] font-bold text-cyan-600 dark:text-cyan-400">
-              {(100 - volatilityIndex).toFixed(1)}/100
+              {Math.max(0, (100 - volatilityIndex)).toFixed(1)}%
             </p>
           </div>
         </div>
       </div>
 
-      <div className="flex-1 w-full min-h-[220px]">
-        <ResponsiveContainer width="100%" height="100%">
+      <div className="flex-1 w-full" style={{ height: 220 }}>
+        <ResponsiveContainer width="100%" height={220}>
           <AreaChart data={chartData}>
             <defs>
               <linearGradient id="colorPrice" x1="0" y1="0" x2="0" y2="1">

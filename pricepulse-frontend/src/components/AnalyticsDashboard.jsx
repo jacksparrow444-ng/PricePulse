@@ -2,7 +2,7 @@ import React from 'react';
 import jsPDF from 'jspdf';
 import autoTable from 'jspdf-autotable';
 import { ShieldCheck, Info, Image as ImageIcon, DownloadCloud } from 'lucide-react';
-import { PieChart, Pie, Cell, ResponsiveContainer } from 'recharts';
+import { PieChart, Pie, Cell } from 'recharts';
 import { usePrice } from '../context/PriceContext';
 
 const AnalyticsDashboard = () => {
@@ -195,16 +195,26 @@ const AnalyticsDashboard = () => {
       <div className="flex flex-col gap-4">
         <div className="bg-white dark:bg-[#0f1115] p-6 rounded-[2rem] border border-slate-200/60 dark:border-white/5 flex-1 flex flex-col justify-center relative overflow-hidden items-center group shadow-[0_8px_30px_rgb(0,0,0,0.04)] dark:shadow-2xl transition-colors duration-500">
           <div className="absolute right-0 top-0 w-32 h-32 bg-purple-400/10 blur-[40px] rounded-full"></div>
-          <div className="relative w-28 h-28">
-            <ResponsiveContainer width="100%" height="100%">
-              <PieChart>
-                <Pie data={pieData} cx="50%" cy="50%" innerRadius={35} outerRadius={45} dataKey="value" startAngle={90} endAngle={-270} stroke="none">
-                  {pieData.map((entry, index) => <Cell key={`cell-${index}`} fill={PIE_COLORS[index % PIE_COLORS.length]} />)}
-                </Pie>
-              </PieChart>
-            </ResponsiveContainer>
-            <div className="absolute inset-0 flex flex-col items-center justify-center">
-              <span className="text-xl font-black text-cyan-600 leading-none">{confidenceScore}%</span>
+          <div className="relative" style={{ width: 112, height: 112 }}>
+            <PieChart width={112} height={112}>
+              <Pie
+                data={pieData}
+                cx={56}
+                cy={56}
+                innerRadius={35}
+                outerRadius={48}
+                dataKey="value"
+                startAngle={90}
+                endAngle={-270}
+                stroke="none"
+              >
+                {pieData.map((entry, index) => (
+                  <Cell key={`cell-${index}`} fill={PIE_COLORS[index % PIE_COLORS.length]} />
+                ))}
+              </Pie>
+            </PieChart>
+            <div className="absolute inset-0 flex flex-col items-center justify-center pointer-events-none">
+              <span className="text-xl font-black text-cyan-600 dark:text-cyan-400 leading-none">{confidenceScore}%</span>
             </div>
           </div>
           <p className="text-slate-500 dark:text-slate-500 text-[10px] uppercase font-bold tracking-widest mt-2 relative z-10">Data Confidence</p>
