@@ -4,6 +4,57 @@
 
 html {
   scroll-behavior: smooth;
+  -webkit-text-size-adjust: 100%;
+}
+
+/* Remove mobile tap flash on all elements */
+* {
+  -webkit-tap-highlight-color: transparent;
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+}
+
+/* Smooth transitions on all interactive elements */
+button, input, select, textarea {
+  transition-property: color, background-color, border-color, box-shadow, opacity, transform;
+  transition-timing-function: cubic-bezier(0.4, 0, 0.2, 1);
+  transition-duration: 150ms;
+}
+
+/* GPU-accelerate heavily blurred/glowing cards */
+.backdrop-blur-2xl,
+.backdrop-blur-xl {
+  will-change: transform;
+  transform: translateZ(0);
+}
+
+/* Recharts tooltip — prevent pointer flicker on mobile */
+.recharts-tooltip-wrapper {
+  pointer-events: none !important;
+  transition: transform 80ms ease-out !important;
+}
+
+/* Recharts active dot smooth resize */
+.recharts-active-dot circle {
+  transition: r 80ms ease;
+}
+
+/* Recharts surface — remove focus outline */
+.recharts-surface {
+  outline: none;
+}
+
+/* Custom scrollbar */
+.custom-scrollbar::-webkit-scrollbar { width: 4px; height: 4px; }
+.custom-scrollbar::-webkit-scrollbar-track { background: transparent; }
+.custom-scrollbar::-webkit-scrollbar-thumb { background: rgba(148,163,184,0.2); border-radius: 10px; }
+.custom-scrollbar::-webkit-scrollbar-thumb:hover { background: rgba(148,163,184,0.4); }
+.dark .custom-scrollbar::-webkit-scrollbar-thumb { background: rgba(255,255,255,0.08); }
+
+/* Mask scroll fade */
+.mask-image-scroll {
+  -webkit-mask-image: linear-gradient(to right, black 80%, transparent 100%);
+  mask-image: linear-gradient(to right, black 80%, transparent 100%);
 }
 
 @keyframes grain {
