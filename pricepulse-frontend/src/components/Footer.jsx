@@ -1,13 +1,15 @@
-import React from 'react';
-import { motion } from 'framer-motion';
-import { Heart, Activity, Crown, Code, PenTool, Cpu, HelpCircle } from 'lucide-react';
+import React, { useState } from 'react';
+import { motion, AnimatePresence } from 'framer-motion';
+import { Heart, Activity, Crown, Code, PenTool, Cpu, HelpCircle, Instagram, MessageCircle, X } from 'lucide-react';
 
 const Footer = () => {
+  const [showHelp, setShowHelp] = useState(false);
+
   return (
     <footer className="mt-auto pt-16 pb-8 relative z-50">
       <div className="absolute top-0 left-1/2 -translate-x-1/2 w-1/2 h-[1px] bg-gradient-to-r from-transparent via-cyan-500/20 to-transparent"></div>
       
-      <div className="glass-panel rounded-[3rem] px-8 py-10 relative overflow-hidden group shadow-[0_-20px_50px_rgba(0,0,0,0.1)] transition-all duration-700 backdrop-blur-3xl">
+      <div className="glass-panel rounded-[3rem] px-8 py-10 relative group shadow-[0_-20px_50px_rgba(0,0,0,0.1)] transition-all duration-700 backdrop-blur-3xl">
         <div className="absolute -left-20 -bottom-20 w-80 h-80 bg-purple-500/5 blur-[100px] rounded-full group-hover:bg-purple-500/10 transition-colors"></div>
 
         <div className="flex flex-col lg:flex-row justify-between items-center gap-12 relative z-10">
@@ -59,12 +61,62 @@ const Footer = () => {
           </div>
 
           {/* Tactical Help Hub */}
-          <div className="flex flex-col items-center lg:items-end">
-            <button className="w-16 h-16 rounded-full bg-cyan-500 text-white shadow-[0_0_30px_rgba(34,211,238,0.4)] flex items-center justify-center hover:scale-110 active:scale-95 transition-all group/help relative">
+          <div className="flex flex-col items-center lg:items-end relative">
+            <button 
+              onClick={() => setShowHelp(!showHelp)}
+              className="w-16 h-16 rounded-full bg-cyan-500 text-white shadow-[0_0_30px_rgba(34,211,238,0.4)] flex items-center justify-center hover:scale-110 active:scale-95 transition-all group/help relative"
+            >
               <div className="absolute inset-0 rounded-full border border-cyan-500 animate-[ping_3s_ease-in-out_infinite] opacity-30"></div>
-              <HelpCircle size={28} className="group-hover/help:rotate-12 transition-transform" />
+              {showHelp ? <X size={28} /> : <HelpCircle size={28} className="group-hover/help:rotate-12 transition-transform" />}
             </button>
             <span className="text-[9px] font-black text-slate-400 uppercase tracking-[0.3em] mt-4">Security Hub</span>
+
+            {/* Contact Overlay — fixed clipping by moving it relative to this specific container */}
+            <AnimatePresence>
+              {showHelp && (
+                <motion.div 
+                  initial={{ opacity: 0, scale: 0.9, y: 10 }}
+                  animate={{ opacity: 1, scale: 1, y: 0 }}
+                  exit={{ opacity: 0, scale: 0.9, y: 10 }}
+                  className="absolute bottom-full right-0 mb-6 w-[280px] glass-panel rounded-3xl p-6 shadow-[0_30px_90px_rgba(34,211,238,0.2)] z-[100] border border-cyan-500/30 backdrop-blur-3xl"
+                >
+                  <div className="absolute top-0 left-0 w-full h-1 bg-gradient-to-r from-cyan-500 to-blue-600"></div>
+                  <h4 className="text-[14px] font-black tracking-tight text-slate-800 dark:text-white mb-5 uppercase tracking-[0.1em]">Security Support Uplink</h4>
+                  
+                  <div className="space-y-4">
+                    {/* Nirmal Contact */}
+                    <div className="bg-white/50 dark:bg-black/20 rounded-2xl p-4 border border-slate-200 dark:border-white/5">
+                      <p className="text-[9px] font-black text-cyan-500 uppercase tracking-widest mb-3 flex items-center gap-2">
+                        <Crown size={12} /> Nirmal (Lead)
+                      </p>
+                      <div className="flex gap-2">
+                        <a href="https://wa.me/919060067232" target="_blank" rel="noreferrer" className="flex-1 flex items-center justify-center gap-1.5 bg-emerald-500/10 hover:bg-emerald-500/20 text-emerald-600 dark:text-emerald-400 py-2.5 rounded-xl text-[10px] font-black transition-all hover:scale-[1.03] border border-emerald-500/20">
+                          <MessageCircle size={14} /> WhatsApp
+                        </a>
+                        <a href="https://instagram.com/nirmalgupta.vx" target="_blank" rel="noreferrer" className="flex-1 flex items-center justify-center gap-1.5 bg-rose-500/10 hover:bg-rose-500/20 text-rose-600 dark:text-rose-400 py-2.5 rounded-xl text-[10px] font-black transition-all hover:scale-[1.03] border border-rose-500/20">
+                          <Instagram size={14} /> Insta
+                        </a>
+                      </div>
+                    </div>
+
+                    {/* Tanishq Contact */}
+                    <div className="bg-white/50 dark:bg-black/20 rounded-2xl p-4 border border-slate-200 dark:border-white/5">
+                      <p className="text-[9px] font-black text-blue-500 uppercase tracking-widest mb-3 flex items-center gap-2">
+                        <Code size={12} /> Tanishq (Dev)
+                      </p>
+                      <div className="flex gap-2">
+                        <a href="https://wa.me/919991182725" target="_blank" rel="noreferrer" className="flex-1 flex items-center justify-center gap-1.5 bg-emerald-500/10 hover:bg-emerald-500/20 text-emerald-600 dark:text-emerald-400 py-2.5 rounded-xl text-[10px] font-black transition-all hover:scale-[1.03] border border-emerald-500/20">
+                          <MessageCircle size={14} /> WhatsApp
+                        </a>
+                        <a href="https://instagram.com/tanishq_1718_" target="_blank" rel="noreferrer" className="flex-1 flex items-center justify-center gap-1.5 bg-rose-500/10 hover:bg-rose-500/20 text-rose-600 dark:text-rose-400 py-2.5 rounded-xl text-[10px] font-black transition-all hover:scale-[1.03] border border-rose-500/20">
+                          <Instagram size={14} /> Insta
+                        </a>
+                      </div>
+                    </div>
+                  </div>
+                </motion.div>
+              )}
+            </AnimatePresence>
           </div>
         </div>
 
