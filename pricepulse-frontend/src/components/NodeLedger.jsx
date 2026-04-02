@@ -41,10 +41,10 @@ const NodeLedger = () => {
     >
       {/* Header */}
       <div className="flex justify-between items-center mb-4 gap-2 flex-wrap">
-        <h3 className={`text-[11px] font-black uppercase tracking-widest flex items-center gap-2
+        <h2 className={`text-[11px] font-black uppercase tracking-widest flex items-center gap-2
           ${isDark ? 'text-slate-400' : 'text-indigo-500'}`}>
           <List size={14} /> Store Prices
-        </h3>
+        </h2>
         {/* Location filter pills */}
         {locations.length > 2 && (
           <div className="flex gap-1.5 overflow-x-auto pb-0.5 custom-scrollbar">

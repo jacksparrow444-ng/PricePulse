@@ -165,7 +165,7 @@ const AnalyticsDashboard = () => {
                 ${isDark ? 'text-slate-400 border-white/10' : 'text-slate-400 border-slate-300/60'}`}>
                 ID: {searchId}
               </span>
-              <button onClick={handleDownloadPDF}
+              <button onClick={handleDownloadPDF} aria-label="Download PDF report"
                 className={`btn-primary flex items-center gap-1.5 text-[10px] font-bold px-3 py-1.5 rounded-lg
                   ${isDark ? 'bg-indigo-500/10 border border-indigo-500/20 text-indigo-400 hover:bg-indigo-500 hover:text-white'
                            : 'bg-indigo-50 border border-indigo-200 text-indigo-600 hover:bg-indigo-500 hover:text-white'}`}>
@@ -178,9 +178,9 @@ const AnalyticsDashboard = () => {
           <p className={`text-sm font-semibold mb-1 relative z-10 ${isDark ? 'text-slate-400' : 'text-slate-500'}`}>
             {analytics.category || 'Product'}
           </p>
-          <h3 className={`text-xl font-black tracking-tight mb-4 relative z-10 ${isDark ? 'text-white' : 'text-slate-900'}`}>
+          <h2 className={`text-xl font-black tracking-tight mb-4 relative z-10 ${isDark ? 'text-white' : 'text-slate-900'}`}>
             {analytics.product_name}
-          </h3>
+          </h2>
 
           {/* ── HERO PRICE + TREND BADGE ───────────────────────── */}
           <div className="relative z-10 mb-5">
@@ -429,9 +429,9 @@ const AnalyticsDashboard = () => {
                     </div>
                     <div>
                       <p className={`text-[9px] font-black uppercase tracking-widest opacity-60 ${aiCls.text}`}>AI Reasoning</p>
-                      <h3 className={`text-base font-black ${isDark ? 'text-white' : 'text-slate-800'}`}>
+                      <h2 className={`text-base font-black ${isDark ? 'text-white' : 'text-slate-800'}`}>
                         {aiSug.emoji} {aiSug.label}
-                      </h3>
+                      </h2>
                     </div>
                   </div>
                   <button onClick={() => setShowWhyModal(false)}

@@ -106,9 +106,9 @@ const DataInjection = () => {
           <PlusCircle size={18} />
         </div>
         <div>
-          <h3 className={`font-black text-base leading-tight ${isDark ? 'text-white' : 'text-slate-800'}`}>
+          <h2 className={`font-black text-base leading-tight ${isDark ? 'text-white' : 'text-slate-800'}`}>
             Add a Price
-          </h3>
+          </h2>
           <p className={`text-[10px] mt-0.5 ${isDark ? 'text-slate-500' : 'text-slate-400'}`}>
             Help others by sharing what you paid
           </p>
@@ -120,7 +120,7 @@ const DataInjection = () => {
 
         {/* Product Name */}
         <div className="space-y-1.5" ref={wrapperRef}>
-          <label className={`text-[10px] font-bold uppercase tracking-wider flex items-center justify-between
+          <label htmlFor="product_name" className={`text-[10px] font-bold uppercase tracking-wider flex items-center justify-between
             ${isDark ? 'text-slate-400' : 'text-slate-500'}`}>
             <span className="flex items-center gap-1.5"><Search size={10} /> Product Name</span>
             {selectedProduct && (
@@ -131,6 +131,7 @@ const DataInjection = () => {
           </label>
           <div className="relative">
             <input
+              id="product_name"
               ref={inputRef}
               required
               type="text"
@@ -147,11 +148,12 @@ const DataInjection = () => {
 
         {/* Price */}
         <div className="space-y-1.5">
-          <label className={`text-[10px] font-bold uppercase tracking-wider flex items-center gap-1.5
+          <label htmlFor="price" className={`text-[10px] font-bold uppercase tracking-wider flex items-center gap-1.5
             ${isDark ? 'text-slate-400' : 'text-slate-500'}`}>
             <IndianRupee size={10} /> Price You Paid (₹)
           </label>
           <input
+            id="price"
             required type="number" step="0.01" placeholder="0.00"
             value={formData.price}
             onChange={(e) => setFormData({ ...formData, price: e.target.value })}
@@ -162,11 +164,12 @@ const DataInjection = () => {
         {/* City + Shop — side by side */}
         <div className="grid grid-cols-2 gap-3">
           <div className="space-y-1.5">
-            <label className={`text-[10px] font-bold uppercase tracking-wider flex items-center gap-1.5
+            <label htmlFor="location" className={`text-[10px] font-bold uppercase tracking-wider flex items-center gap-1.5
               ${isDark ? 'text-slate-400' : 'text-slate-500'}`}>
               <MapPin size={10} /> City / Area
             </label>
             <input
+              id="location"
               required type="text" placeholder="e.g. Delhi, Noida"
               value={formData.location}
               onChange={(e) => setFormData({ ...formData, location: e.target.value })}
@@ -174,11 +177,12 @@ const DataInjection = () => {
             />
           </div>
           <div className="space-y-1.5">
-            <label className={`text-[10px] font-bold uppercase tracking-wider flex items-center gap-1.5
+            <label htmlFor="store_name" className={`text-[10px] font-bold uppercase tracking-wider flex items-center gap-1.5
               ${isDark ? 'text-slate-400' : 'text-slate-500'}`}>
               <Store size={10} /> Shop Name
             </label>
             <input
+              id="store_name"
               required type="text" placeholder="e.g. Big Bazaar"
               value={formData.store_name}
               onChange={(e) => setFormData({ ...formData, store_name: e.target.value })}
@@ -189,13 +193,13 @@ const DataInjection = () => {
 
         {/* Photo Upload */}
         <div className="space-y-1.5">
-          <label className={`text-[10px] font-bold uppercase tracking-wider flex items-center gap-1.5
+          <label htmlFor="photo_upload" className={`text-[10px] font-bold uppercase tracking-wider flex items-center gap-1.5
             ${isDark ? 'text-slate-400' : 'text-slate-500'}`}>
             <Camera size={10} /> Add a Photo
             <span className={`font-normal normal-case tracking-normal text-[9px] ${isDark ? 'text-slate-600' : 'text-slate-400'}`}>(optional)</span>
           </label>
           <div className="relative group cursor-pointer">
-            <input type="file" accept="image/*" onChange={handleFileChange}
+            <input id="photo_upload" type="file" accept="image/*" onChange={handleFileChange}
               className="absolute inset-0 w-full h-full opacity-0 cursor-pointer z-10" />
             <div className={`w-full border-2 border-dashed rounded-xl flex items-center justify-center h-20 overflow-hidden transition-all
               ${isDark

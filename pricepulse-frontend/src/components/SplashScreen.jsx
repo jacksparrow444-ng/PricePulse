@@ -12,6 +12,13 @@ const SplashScreen = ({ onDone }) => {
   const [phase, setPhase] = useState('in');
 
   useEffect(() => {
+    // Hide inline HTML splash as soon as React splash mounts
+    const inline = document.getElementById('inline-splash');
+    if (inline) {
+      inline.classList.add('hide');
+      setTimeout(() => inline.remove(), 500);
+    }
+
     // Reduced for performance: content appears 2s faster
     const timerOut  = setTimeout(() => setPhase('out'), 1800);
     const timerDone = setTimeout(() => onDone(),        2500);

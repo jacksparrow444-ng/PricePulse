@@ -68,6 +68,7 @@ const Header = () => {
         {/* History */}
         <div className="relative">
           <button
+            aria-label="Recent Searches"
             onClick={() => setShowHistory(!showHistory)}
             className={`p-2 rounded-xl transition-all
               ${isDark
@@ -110,6 +111,7 @@ const Header = () => {
 
         {/* Theme toggle */}
         <button
+          aria-label="Toggle Theme"
           onClick={toggleTheme}
           className={`p-2 rounded-xl transition-all
             ${isDark

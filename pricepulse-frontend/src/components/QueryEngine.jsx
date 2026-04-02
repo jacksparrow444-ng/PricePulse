@@ -79,6 +79,7 @@ const QueryEngine = () => {
             <button
               key={sugg.id}
               type="button"
+              aria-label={`Suggest: ${sugg.name}`}
               onMouseDown={(e) => { e.preventDefault(); handleSuggestionClick(sugg.id); }}
               className={`w-full text-left px-4 py-3 border-b last:border-0 flex items-center justify-between group transition-colors
                 ${isDark
@@ -115,6 +116,7 @@ const QueryEngine = () => {
             <input
               ref={inputRef}
               type="text"
+              aria-label="Search by name or ID"
               value={searchId}
               onChange={(e) => { setSearchId(e.target.value); setShowSuggestions(true); updateDropdownPosition(); }}
               onFocus={() => { setShowSuggestions(true); updateDropdownPosition(); }}
@@ -127,6 +129,7 @@ const QueryEngine = () => {
             />
             <button
               type="button"
+              aria-label="Submit search"
               onClick={(e) => { if (searchId) { e.preventDefault(); fetchAnalytics(null, searchId); } }}
               disabled={isSearching}
               className={`absolute right-2 top-2 bottom-2 aspect-square text-white rounded-lg flex items-center justify-center transition-all

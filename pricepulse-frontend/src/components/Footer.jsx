@@ -183,13 +183,13 @@ export default function Footer() {
                       {(member.wa || member.ig) && (
                         <div className="flex gap-1.5 opacity-0 group-hover:opacity-100 transition-opacity duration-200">
                           {member.wa && (
-                            <a href={member.wa} target="_blank" rel="noreferrer"
+                            <a href={member.wa} target="_blank" rel="noreferrer" aria-label="WhatsApp"
                               className="p-1.5 rounded-lg bg-emerald-500/10 text-emerald-500 hover:bg-emerald-500/20 transition-colors border border-emerald-500/20">
                               <MessageCircle size={12} />
                             </a>
                           )}
                           {member.ig && (
-                            <a href={member.ig} target="_blank" rel="noreferrer"
+                            <a href={member.ig} target="_blank" rel="noreferrer" aria-label="Instagram"
                               className="p-1.5 rounded-lg bg-rose-500/10 text-rose-500 hover:bg-rose-500/20 transition-colors border border-rose-500/20">
                               <Instagram size={12} />
                             </a>
@@ -315,6 +315,7 @@ export default function Footer() {
             </span>
           )}
           <button
+            aria-label="Contact Us"
             onClick={() => setShowContact(!showContact)}
             className={`btn-primary relative w-16 h-16 rounded-2xl text-white shadow-2xl flex items-center justify-center transition-all
               hover:scale-110 active:scale-95 hover:shadow-[0_0_30px_rgba(99,102,241,0.5)]
