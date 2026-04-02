@@ -204,7 +204,6 @@ const AnalyticsDashboard = () => {
                     WebkitBackgroundClip: 'text',
                     WebkitTextFillColor: 'transparent',
                     backgroundClip: 'text',
-                    filter: isDark ? 'drop-shadow(0 0 24px rgba(34,211,238,0.25))' : 'drop-shadow(0 0 20px rgba(99,102,241,0.18))',
                   }}
                 >
                   {avg.toFixed(2)}
