@@ -97,10 +97,10 @@ const NodeLedger = () => {
                 </div>
 
                 <div className="text-right flex-shrink-0 ml-3 flex flex-col items-end gap-1">
-                    <p className={`font-mono text-base font-black ${isDark ? 'text-white' : 'text-slate-800'}`}>
+                    <p className={`font-mono text-lg font-black ${isDark ? 'text-white' : 'text-slate-800'}`}>
                     ₹{price.toFixed(2)}
                   </p>
-                  <div className={`${tag.cls} px-2 py-0.5 rounded-md text-[7px] font-black uppercase tracking-wide`}>
+                  <div className={`${tag.cls} px-2.5 py-1 rounded-md text-[9px] font-black uppercase tracking-wide`}>
                     {tag.text}
                   </div>
                   {/* Show savings vs average */}

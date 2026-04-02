@@ -178,10 +178,23 @@ const VolatilityChart = () => {
               type="monotone" dataKey="price"
               stroke={lineColor} strokeWidth={3.5}
               fillOpacity={1} fill="url(#areaFill)"
-              dot={chartData.length <= 20
-                ? { r: 3.5, fill: lineColor, strokeWidth: 0, opacity: 0.8 }
-                : false
-              }
+              dot={(props) => {
+                const { cx, cy, index } = props;
+                const isLast = index === chartData.length - 1;
+                if (!isLast) {
+                  return chartData.length <= 20
+                    ? <circle key={index} cx={cx} cy={cy} r={3.5} fill={lineColor} opacity={0.8} />
+                    : null;
+                }
+                // Last point — glowing pulse dot
+                return (
+                  <g key={index}>
+                    <circle cx={cx} cy={cy} r={10} fill={lineColor} opacity={0.15} />
+                    <circle cx={cx} cy={cy} r={6} fill={lineColor} opacity={0.3} />
+                    <circle cx={cx} cy={cy} r={4} fill={lineColor} opacity={0.9} stroke="white" strokeWidth={2} />
+                  </g>
+                );
+              }}
               activeDot={{ r: 8, fill: '#fff', stroke: lineColor, strokeWidth: 3, filter: `drop-shadow(0 0 10px ${lineColor}) drop-shadow(0 0 4px ${lineColor})` }}
               animationDuration={1000}
               animationEasing="ease-out"
