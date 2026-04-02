@@ -144,9 +144,9 @@ const SplashScreen = ({ onDone }) => {
                  initial={{ opacity: 0 }}
                  animate={{ opacity: 0.6 }}
                  transition={{ delay: 1.2 }}
-                 className="text-[10px] font-bold tracking-[0.6em] text-cyan-200 mt-4 uppercase"
+                 className="text-[10px] font-bold tracking-[0.5em] text-cyan-200 mt-4 uppercase"
                >
-                 Next-Gen Price Aggregator Node v4.0
+                 The smarter way to shop
                </motion.p>
             </div>
 
@@ -193,7 +193,7 @@ const SplashScreen = ({ onDone }) => {
             >
               <span className="w-2 h-2 rounded-full bg-cyan-500 animate-pulse shadow-[0_0_10px_#06b6d4]" />
               <p className="text-[10px] font-black uppercase tracking-[0.3em] text-slate-400">
-                Authorized Access Only <span className="text-cyan-500">·</span> POKEMON TEAM
+                Made with ❤️ by <span className="text-cyan-500">Pokemon Team</span>
               </p>
             </motion.div>
           </div>

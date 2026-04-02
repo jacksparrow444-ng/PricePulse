@@ -6,27 +6,20 @@ import { usePrice } from '../context/PriceContext';
 import axios from 'axios';
 
 const QueryEngine = () => {
-  const { searchId, setSearchId, fetchAnalytics, isSearching, analytics, recentSearches, IMAGE_BASE } = usePrice();
+  const { searchId, setSearchId, fetchAnalytics, isSearching, analytics, recentSearches, IMAGE_BASE, theme } = usePrice();
   const [suggestions, setSuggestions] = useState([]);
   const [showSuggestions, setShowSuggestions] = useState(false);
   const [dropdownStyle, setDropdownStyle] = useState({});
   const wrapperRef = useRef(null);
   const inputRef = useRef(null);
+  const isDark = theme === 'dark';
 
-  // Calculate fixed position under the input
   const updateDropdownPosition = () => {
     if (!inputRef.current) return;
     const rect = inputRef.current.getBoundingClientRect();
-    setDropdownStyle({
-      position: 'fixed',
-      top: rect.bottom + 6,
-      left: rect.left,
-      width: rect.width,
-      zIndex: 99999,
-    });
+    setDropdownStyle({ position: 'fixed', top: rect.bottom + 6, left: rect.left, width: rect.width, zIndex: 99999 });
   };
 
-  // Close on click outside
   useEffect(() => {
     function handleClickOutside(event) {
       if (wrapperRef.current && !wrapperRef.current.contains(event.target)) {
@@ -37,7 +30,6 @@ const QueryEngine = () => {
     return () => document.removeEventListener('mousedown', handleClickOutside);
   }, []);
 
-  // Reposition on scroll / resize so dropdown sticks to input
   useEffect(() => {
     if (showSuggestions) {
       updateDropdownPosition();
@@ -50,7 +42,6 @@ const QueryEngine = () => {
     }
   }, [showSuggestions]);
 
-  // Debounced fetch suggestions
   useEffect(() => {
     const fetchSugg = async () => {
       if (!searchId || searchId.length < 2) { setSuggestions([]); return; }
@@ -69,32 +60,39 @@ const QueryEngine = () => {
     fetchAnalytics(null, id.toString());
   };
 
-  // Dropdown rendered via Portal — completely outside all stacking contexts
   const dropdown = (
     <AnimatePresence>
       {showSuggestions && suggestions.length > 0 && (
         <motion.div
-          initial={{ opacity: 0, y: -8 }}
+          initial={{ opacity: 0, y: -6 }}
           animate={{ opacity: 1, y: 0 }}
-          exit={{ opacity: 0, y: -8 }}
-          transition={{ duration: 0.15 }}
+          exit={{ opacity: 0, y: -6 }}
+          transition={{ duration: 0.12 }}
           style={dropdownStyle}
-          className="bg-white dark:bg-[#161920] border border-slate-200 dark:border-white/10 rounded-2xl shadow-2xl overflow-hidden"
+          className={`rounded-2xl shadow-2xl overflow-hidden border
+            ${isDark
+              ? 'bg-[#161920] border-white/10'
+              : 'bg-white border-indigo-100 shadow-indigo-100/80'
+            }`}
         >
           {suggestions.map((sugg) => (
             <button
               key={sugg.id}
               type="button"
               onMouseDown={(e) => { e.preventDefault(); handleSuggestionClick(sugg.id); }}
-              className="w-full text-left px-5 py-3 hover:bg-slate-50 dark:hover:bg-white/5 border-b border-slate-100 dark:border-white/5 last:border-0 flex items-center justify-between group transition-colors"
+              className={`w-full text-left px-4 py-3 border-b last:border-0 flex items-center justify-between group transition-colors
+                ${isDark
+                  ? 'border-white/5 hover:bg-white/5 text-white'
+                  : 'border-slate-100 hover:bg-indigo-50 text-slate-800'
+                }`}
             >
               <div>
-                <p className="text-sm font-bold text-slate-800 dark:text-white">{sugg.name}</p>
-                <p className="text-[10px] uppercase tracking-wider text-slate-400 flex items-center gap-1 mt-0.5">
-                  <Tag size={10} /> {sugg.category}
+                <p className="text-sm font-semibold">{sugg.name}</p>
+                <p className={`text-[10px] flex items-center gap-1 mt-0.5 ${isDark ? 'text-slate-500' : 'text-slate-400'}`}>
+                  <Tag size={9} /> {sugg.category}
                 </p>
               </div>
-              <ChevronRight size={16} className="text-slate-300 dark:text-slate-600 group-hover:text-cyan-500 transition-colors" />
+              <ChevronRight size={14} className={`group-hover:translate-x-0.5 transition-transform ${isDark ? 'text-slate-600' : 'text-slate-300'}`} />
             </button>
           ))}
         </motion.div>
@@ -103,19 +101,14 @@ const QueryEngine = () => {
   );
 
   return (
-    <div className="space-y-6">
-      <motion.div
-        whileHover={{ scale: 1.005 }}
-        className="glass-panel rounded-[2rem] p-6 shadow-[0_0_50px_rgba(6,182,212,0.15)] relative group transition-all duration-500"
-      >
-        <div className="absolute top-0 left-0 w-full h-1 bg-gradient-to-r from-transparent via-cyan-500/50 to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-1000 rounded-t-[2rem]" />
-
-        <h3 className="text-[11px] font-black uppercase tracking-widest text-slate-500 dark:text-slate-400 mb-5 flex items-center gap-2">
-          <Search size={14} className="text-cyan-500 animate-pulse" />
-          <span className="bg-clip-text text-transparent bg-gradient-to-r from-cyan-600 to-blue-600 dark:from-cyan-400 dark:to-blue-400">
-            Premium Query Engine
-          </span>
-        </h3>
+    <div className="space-y-4">
+      <div className="glass-panel rounded-2xl p-5">
+        {/* Section label */}
+        <p className={`text-[10px] font-black uppercase tracking-widest mb-4 flex items-center gap-2
+          ${isDark ? 'text-slate-400' : 'text-indigo-500'}`}>
+          <Search size={12} />
+          Search Products
+        </p>
 
         <div ref={wrapperRef} className="relative">
           <form onSubmit={(e) => { setShowSuggestions(false); fetchAnalytics(e); }} className="relative">
@@ -125,65 +118,84 @@ const QueryEngine = () => {
               value={searchId}
               onChange={(e) => { setSearchId(e.target.value); setShowSuggestions(true); updateDropdownPosition(); }}
               onFocus={() => { setShowSuggestions(true); updateDropdownPosition(); }}
-              placeholder="Search Product ID or Name..."
-              className="w-full bg-slate-50 border border-slate-200 focus:border-cyan-500 focus:glow-cyan rounded-2xl py-4 pl-5 pr-14 outline-none text-sm font-bold text-slate-800 placeholder-slate-400 dark:bg-[#161920] dark:border-white/5 dark:focus:border-cyan-500/50 dark:text-white dark:placeholder-slate-600 transition-all font-mono shadow-inner"
+              placeholder="Search by name or ID..."
+              className={`w-full rounded-xl py-3.5 pl-4 pr-14 outline-none text-sm font-medium transition-all
+                ${isDark
+                  ? 'bg-white/5 border border-white/10 focus:border-cyan-500/50 text-white placeholder-slate-500 focus:bg-white/8'
+                  : 'bg-white border border-slate-200 focus:border-indigo-400 text-slate-800 placeholder-slate-400 shadow-sm focus:shadow-indigo-100/60 focus:shadow-md'
+                }`}
             />
             <button
               type="button"
               onClick={(e) => { if (searchId) { e.preventDefault(); fetchAnalytics(null, searchId); } }}
               disabled={isSearching}
-              className="absolute right-2 top-2 bottom-2 aspect-square bg-gradient-to-br from-cyan-400 to-blue-600 hover:from-cyan-500 hover:to-blue-700 text-white rounded-xl flex items-center justify-center transition-all disabled:opacity-50 disabled:cursor-not-allowed shadow-md shadow-cyan-500/20"
+              className={`absolute right-2 top-2 bottom-2 aspect-square text-white rounded-lg flex items-center justify-center transition-all
+                ${isDark
+                  ? 'bg-gradient-to-br from-cyan-400 to-blue-600 hover:from-cyan-500 hover:to-blue-700 shadow-cyan-500/20'
+                  : 'bg-gradient-to-br from-indigo-500 to-violet-600 hover:from-indigo-600 hover:to-violet-700 shadow-indigo-300/40'
+                } shadow-md disabled:opacity-50`}
             >
-              {isSearching ? <Loader2 size={18} className="animate-spin" /> : <ArrowRight size={18} strokeWidth={2.5} />}
+              {isSearching ? <Loader2 size={16} className="animate-spin" /> : <ArrowRight size={16} strokeWidth={2.5} />}
             </button>
           </form>
-
-          {/* Portal — floats above ALL layers, z-index 99999 */}
           {ReactDOM.createPortal(dropdown, document.body)}
         </div>
 
-        {/* Recent & Trending Pills */}
-        <div className="mt-4 flex flex-wrap gap-2 overflow-hidden max-h-24">
-          <div className="flex items-center gap-1.5 px-3 py-1.5 bg-slate-100 dark:bg-white/5 rounded-xl text-slate-400">
-            <History size={12} />
+        {/* Recent searches */}
+        {recentSearches.length > 0 && (
+          <div className="mt-4 flex flex-wrap gap-2">
+            <div className={`flex items-center gap-1 px-2.5 py-1.5 rounded-lg text-[10px]
+              ${isDark ? 'bg-white/5 text-slate-500' : 'bg-slate-100 text-slate-400'}`}>
+              <History size={11} />
+            </div>
+            <AnimatePresence>
+              {recentSearches.map((s, i) => (
+                <motion.button
+                  key={s.id}
+                  initial={{ scale: 0.8, opacity: 0 }}
+                  animate={{ scale: 1, opacity: 1 }}
+                  transition={{ type: 'spring', stiffness: 300, damping: 20, delay: i * 0.04 }}
+                  onClick={() => handleSuggestionClick(s.id)}
+                  className={`px-3 py-1.5 rounded-lg text-[10px] font-semibold flex items-center gap-1.5 transition-all
+                    ${isDark
+                      ? 'bg-[#161920] border border-white/10 text-slate-300 hover:border-cyan-500/40 hover:text-cyan-400'
+                      : 'bg-white border border-slate-200 text-slate-500 hover:border-indigo-300 hover:text-indigo-600 shadow-sm'
+                    }`}
+                >
+                  {s.name}
+                  <span className="opacity-40 font-mono text-[8px]">#{s.id}</span>
+                </motion.button>
+              ))}
+            </AnimatePresence>
           </div>
-          <AnimatePresence>
-            {recentSearches.map((s, i) => (
-              <motion.button
-                key={s.id}
-                initial={{ scale: 0.8, opacity: 0 }}
-                animate={{ scale: 1, opacity: 1 }}
-                transition={{ type: "spring", stiffness: 300, damping: 20, delay: i * 0.05 }}
-                onClick={() => handleSuggestionClick(s.id)}
-                className="px-3 py-1.5 bg-white dark:bg-[#161920] border border-slate-200 dark:border-white/10 rounded-xl text-[10px] font-black text-slate-600 dark:text-slate-300 hover:border-cyan-500/50 hover:text-cyan-500 transition-all shadow-sm flex items-center gap-1.5"
-              >
-                {s.name} <span className="text-[8px] opacity-40 font-mono">#{s.id}</span>
-              </motion.button>
-            ))}
-          </AnimatePresence>
-        </div>
-      </motion.div>
+        )}
+      </div>
 
+      {/* Active product pill */}
       {analytics && (
         <motion.div
-          initial={{ opacity: 0, scale: 0.95 }}
+          initial={{ opacity: 0, scale: 0.96 }}
           animate={{ opacity: 1, scale: 1 }}
-          className="bg-white/80 dark:bg-[#0f1115]/80 backdrop-blur-xl border border-slate-200/60 dark:border-white/5 rounded-3xl p-5 shadow-sm relative overflow-hidden transition-colors duration-500"
+          className={`glass-panel rounded-xl px-4 py-3 flex items-center justify-between`}
         >
-          <div className="absolute top-0 right-0 w-32 h-32 bg-cyan-500/10 blur-[40px] rounded-full pointer-events-none" />
-          <div className="flex items-center justify-between">
-            <div>
-              <p className="text-[9px] uppercase font-bold text-slate-400 tracking-widest mb-1 flex items-center gap-1.5">
-                <Tag size={10} /> Active Product:
-              </p>
-              <p className="font-bold text-slate-800 dark:text-white text-sm truncate pr-2">
-                {analytics.product_name}
-                <span className="text-slate-500 font-mono text-[10px] ml-1">#{analytics.product_id || searchId}</span>
-              </p>
-            </div>
-            <div className="bg-cyan-50 dark:bg-cyan-500/10 border border-cyan-200 dark:border-cyan-500/20 px-3 py-1.5 rounded-full text-cyan-700 dark:text-cyan-400 text-[9px] font-black uppercase tracking-widest truncate max-w-[100px] flex-shrink-0 text-center">
-              {analytics.category || 'General'}
-            </div>
+          <div>
+            <p className={`text-[9px] font-bold uppercase tracking-widest mb-0.5 flex items-center gap-1
+              ${isDark ? 'text-slate-500' : 'text-slate-400'}`}>
+              <Tag size={9} /> Showing prices for:
+            </p>
+            <p className={`font-bold text-sm ${isDark ? 'text-white' : 'text-slate-800'}`}>
+              {analytics.product_name}
+              <span className={`font-mono text-[10px] ml-1.5 ${isDark ? 'text-slate-500' : 'text-slate-400'}`}>
+                #{analytics.product_id || searchId}
+              </span>
+            </p>
+          </div>
+          <div className={`text-[9px] font-black uppercase tracking-wide px-2.5 py-1 rounded-full
+            ${isDark
+              ? 'bg-cyan-500/10 border border-cyan-500/20 text-cyan-400'
+              : 'bg-indigo-50 border border-indigo-200 text-indigo-600'
+            }`}>
+            {analytics.category || 'General'}
           </div>
         </motion.div>
       )}

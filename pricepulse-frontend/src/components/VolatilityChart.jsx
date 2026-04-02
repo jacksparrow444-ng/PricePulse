@@ -4,16 +4,22 @@ import {
   Tooltip, ResponsiveContainer, ReferenceLine
 } from 'recharts';
 import { usePrice } from '../context/PriceContext';
-import { TrendingUp, TrendingDown, Minus, Activity } from 'lucide-react';
+import { TrendingUp, TrendingDown, Minus, BarChart2 } from 'lucide-react';
 
-const CustomTooltip = ({ active, payload }) => {
+const CustomTooltip = ({ active, payload, isDark }) => {
   if (!active || !payload?.length) return null;
   const d = payload[0].payload;
   return (
-    <div className="glass-panel border border-cyan-500/30 rounded-2xl px-4 py-3 shadow-[0_10px_40px_rgba(0,0,0,0.2)] backdrop-blur-3xl animate-in fade-in zoom-in-95 duration-200">
-      <p className="text-[10px] font-black uppercase tracking-[0.2em] text-cyan-500 mb-1 truncate max-w-[140px] leading-none">{d.store}</p>
-      <p className="text-[9px] font-bold text-slate-400 mb-2">{d.location}</p>
-      <p className="text-2xl font-black text-slate-800 dark:text-white leading-none tracking-tighter">₹{d.price}</p>
+    <div className={`rounded-xl px-4 py-3 shadow-xl border text-left
+      ${isDark
+        ? 'bg-[#1a1f2e]/95 border-white/10'
+        : 'bg-white border-slate-200 shadow-indigo-100/60'
+      }`}
+      style={{ pointerEvents: 'none' }}>
+      <p className={`text-[9px] font-bold uppercase tracking-widest mb-0.5 truncate max-w-[130px]
+        ${isDark ? 'text-slate-400' : 'text-slate-400'}`}>{d.store}</p>
+      <p className={`text-[9px] mb-1 ${isDark ? 'text-slate-500' : 'text-slate-400'}`}>{d.location}</p>
+      <p className={`text-xl font-black ${isDark ? 'text-white' : 'text-slate-800'}`}>₹{d.price}</p>
     </div>
   );
 };
@@ -50,87 +56,113 @@ const VolatilityChart = () => {
 
   const stabilityPct = Math.max(0, 100 - volatility).toFixed(1);
   const TrendIcon = trend?.dir === 'up' ? TrendingUp : trend?.dir === 'down' ? TrendingDown : Minus;
-  const trendColor = trend?.dir === 'up' ? 'text-rose-500' : trend?.dir === 'down' ? 'text-emerald-500' : 'text-slate-400';
-  const lineColor = isDark ? '#22d3ee' : '#06b6d4';
+  const trendLabel = trend?.dir === 'up' ? 'Prices Going Up' : trend?.dir === 'down' ? 'Prices Coming Down' : 'Prices Stable';
+  const trendColor = isDark
+    ? (trend?.dir === 'up' ? 'text-rose-400' : trend?.dir === 'down' ? 'text-emerald-400' : 'text-slate-400')
+    : (trend?.dir === 'up' ? 'text-rose-600' : trend?.dir === 'down' ? 'text-emerald-600' : 'text-slate-400');
+
+  const lineColor = isDark ? '#22d3ee' : '#6366f1';
 
   return (
-    <div className="lg:col-span-2 glass-panel p-6 md:p-8 rounded-[2.5rem] flex flex-col shadow-[0_20px_60px_rgba(0,0,0,0.1)] relative overflow-hidden group transition-all duration-700">
-      <div className="absolute top-0 right-0 w-64 h-64 bg-cyan-500/5 blur-[80px] rounded-full"></div>
-      
-      <div className="flex flex-col sm:flex-row justify-between items-start sm:items-center gap-4 mb-8 relative z-10">
+    <div className="lg:col-span-2 glass-panel p-6 rounded-2xl flex flex-col">
+      {/* Header */}
+      <div className="flex justify-between items-start mb-5 gap-3 flex-wrap">
         <div>
-          <h3 className="font-black text-xs uppercase tracking-[0.3em] text-cyan-600/80 dark:text-cyan-400/60 flex items-center gap-2 leading-none">
-            <Activity size={14} className="animate-pulse" /> Volatility Matrix
-          </h3>
-          <div className="mt-3 flex items-center gap-2">
-            <div className={`p-1.5 rounded-lg bg-slate-100 dark:bg-white/5 ${trendColor}`}>
-              <TrendIcon size={14} />
+          <p className={`text-[10px] font-black uppercase tracking-widest flex items-center gap-2 mb-2
+            ${isDark ? 'text-slate-400' : 'text-indigo-500'}`}>
+            <BarChart2 size={12} /> Price History
+          </p>
+          <div className="flex items-center gap-2">
+            <div className={`p-1.5 rounded-lg ${isDark ? 'bg-white/5' : 'bg-slate-100'}`}>
+              <TrendIcon size={13} className={trendColor} />
             </div>
-            <p className={`text-xs font-black tracking-tight ${trendColor}`}>
-              {trend?.dir === 'up' ? 'Inflationary' : trend?.dir === 'down' ? 'Deflationary' : 'Neutral'} Trend
-            </p>
-            <span className="text-[10px] font-mono font-black text-slate-400 bg-white/40 dark:bg-black/20 px-2 py-0.5 rounded-full border border-slate-200/50 dark:border-white/5">
+            <p className={`text-xs font-bold ${trendColor}`}>{trendLabel}</p>
+            <span className={`text-[10px] font-mono px-2 py-0.5 rounded-full border
+              ${isDark
+                ? 'text-slate-400 bg-white/5 border-white/10'
+                : 'text-slate-500 bg-white border-slate-200'
+              }`}>
               {parseFloat(trend?.pct) > 0 ? '+' : ''}{trend?.pct}%
             </span>
           </div>
         </div>
 
-        <div className="flex gap-4 p-1.5 bg-white/20 dark:bg-black/20 rounded-2xl border border-white/10 shadow-inner">
-          <div className="px-4 py-2 text-center group/v">
-            <p className="text-[8px] uppercase font-black text-slate-400 tracking-[0.2em] mb-1">Volatitly</p>
-            <p className="font-mono text-xs font-black text-rose-500 tracking-tighter group-hover/v:scale-110 transition-transform">{volatility.toFixed(1)}%</p>
+        {/* Spread stats */}
+        <div className={`flex gap-4 px-4 py-2.5 rounded-xl border text-right
+          ${isDark ? 'bg-white/5 border-white/10' : 'bg-white border-slate-200 shadow-sm'}`}>
+          <div>
+            <p className={`text-[8px] font-bold uppercase tracking-widest mb-1 ${isDark ? 'text-slate-500' : 'text-slate-400'}`}>
+              Price Spread
+            </p>
+            <p className={`font-mono text-xs font-black text-rose-500`}>{volatility.toFixed(1)}%</p>
           </div>
-          <div className="w-[1px] bg-slate-300 dark:bg-white/5" />
-          <div className="px-4 py-2 text-center group/s">
-            <p className="text-[8px] uppercase font-black text-slate-400 tracking-[0.2em] mb-1">Stability</p>
-            <p className="font-mono text-xs font-black text-cyan-500 tracking-tighter group-hover/s:scale-110 transition-transform">{stabilityPct}%</p>
+          <div className={`w-px ${isDark ? 'bg-white/10' : 'bg-slate-200'}`} />
+          <div>
+            <p className={`text-[8px] font-bold uppercase tracking-widest mb-1 ${isDark ? 'text-slate-500' : 'text-slate-400'}`}>
+              Consistency
+            </p>
+            <p className={`font-mono text-xs font-black ${isDark ? 'text-cyan-400' : 'text-indigo-600'}`}>{stabilityPct}%</p>
           </div>
         </div>
       </div>
 
-      <div className="flex flex-wrap gap-2 mb-8 relative z-10">
+      {/* Price chips */}
+      <div className="flex flex-wrap gap-2 mb-5">
         {[
-          { label: 'Min', val: min, theme: 'emerald' },
-          { label: 'Avg', val: avg, theme: 'cyan' },
-          { label: 'Max', val: max, theme: 'rose' }
-        ].map(({ label, val, theme }) => (
-          <div key={label} className={`flex items-center gap-2 pl-3 pr-4 py-2 rounded-2xl bg-${theme}-500/10 border border-${theme}-500/20 text-${theme}-600 dark:text-${theme}-400 group/stat hover:scale-105 transition-all`}>
-            <span className="text-[9px] font-black uppercase tracking-widest opacity-60">{label}</span>
-            <span className="font-mono font-black text-xs leading-none">₹{parseFloat(val).toFixed(0)}</span>
+          { label: 'Lowest', val: min, theme: 'emerald' },
+          { label: 'Average', val: avg, theme: isDark ? 'cyan' : 'indigo' },
+          { label: 'Highest', val: max, theme: 'rose' },
+          { label: 'Reports', val: chartData.length, isCount: true, theme: 'slate' },
+        ].map(({ label, val, theme: t, isCount }) => (
+          <div key={label} className={`flex items-center gap-2 px-3 py-1.5 rounded-xl text-[10px] font-bold border
+            ${isDark
+              ? `bg-${t === 'cyan' ? 'cyan' : t}-500/10 border-${t === 'cyan' ? 'cyan' : t}-500/20 text-${t === 'cyan' ? 'cyan' : t}-${t === 'slate' ? '400' : '400'}`
+              : `bg-${t}-50 border-${t}-200 text-${t}-${t === 'slate' ? '500' : '700'}`
+            }`}>
+            <span className="opacity-60">{label}:</span>
+            <span className="font-mono font-black">
+              {isCount ? val : `₹${parseFloat(val).toFixed(0)}`}
+            </span>
           </div>
         ))}
       </div>
 
-      <div style={{ height: 220 }} className="relative z-10">
+      {/* Chart */}
+      <div style={{ height: 200 }}>
         <ResponsiveContainer width="100%" height="100%">
-          <AreaChart data={chartData} margin={{ top: 10, right: 10, left: -25, bottom: 0 }}>
+          <AreaChart data={chartData} margin={{ top: 8, right: 4, left: -20, bottom: 0 }}>
             <defs>
-              <linearGradient id="cyberGrad" x1="0" y1="0" x2="0" y2="1">
-                <stop offset="5%" stopColor={lineColor} stopOpacity={0.3} />
+              <linearGradient id="areaGrad" x1="0" y1="0" x2="0" y2="1">
+                <stop offset="5%" stopColor={lineColor} stopOpacity={0.25} />
                 <stop offset="95%" stopColor={lineColor} stopOpacity={0} />
               </linearGradient>
             </defs>
-            <CartesianGrid strokeDasharray="3 3" vertical={false} stroke={isDark ? 'rgba(255,255,255,0.05)' : 'rgba(0,0,0,0.05)'} />
-            <XAxis dataKey="label" axisLine={false} tickLine={false} tick={{ fontSize: 10, fill: '#64748b', fontWeight: 900 }} dy={10} />
-            <YAxis axisLine={false} tickLine={false} tick={{ fontSize: 10, fill: '#64748b', fontWeight: 700 }} tickFormatter={(v) => `₹${v}`} domain={['dataMin - 10', 'dataMax + 10']} width={60} />
-            <Tooltip content={<CustomTooltip />} cursor={{ stroke: lineColor, strokeWidth: 2, strokeDasharray: '4 4' }} />
-            <ReferenceLine y={avg} stroke={lineColor} strokeDasharray="5 5" strokeOpacity={0.4} strokeWidth={2} />
-            <Area
-              type="monotone"
-              dataKey="price"
-              stroke={lineColor}
-              strokeWidth={3}
-              fill="url(#cyberGrad)"
-              animationDuration={1500}
-              animationEasing="cubic-bezier(0.16, 1, 0.3, 1)"
-              activeDot={{ r: 8, fill: '#fff', stroke: lineColor, strokeWidth: 3 }}
-            />
+            <CartesianGrid strokeDasharray="3 3" vertical={false}
+              stroke={isDark ? 'rgba(255,255,255,0.04)' : 'rgba(0,0,0,0.06)'} />
+            <XAxis dataKey="label" axisLine={false} tickLine={false}
+              tick={{ fontSize: 9, fill: isDark ? '#475569' : '#94a3b8', fontWeight: 700 }}
+              interval={Math.floor(chartData.length / 6)} dy={8} />
+            <YAxis axisLine={false} tickLine={false}
+              tick={{ fontSize: 9, fill: isDark ? '#475569' : '#94a3b8', fontWeight: 600 }}
+              tickFormatter={(v) => `₹${v}`}
+              domain={[(d) => Math.max(0, d - d * 0.06), (d) => d + d * 0.06]}
+              width={55} />
+            <ReferenceLine y={avg} stroke={lineColor} strokeDasharray="5 4" strokeOpacity={0.4} strokeWidth={1.5} />
+            <Tooltip content={<CustomTooltip isDark={isDark} />}
+              cursor={{ stroke: lineColor, strokeWidth: 1.5, strokeDasharray: '4 4', strokeOpacity: 0.5 }} />
+            <Area type="monotone" dataKey="price"
+              stroke={lineColor} strokeWidth={2.5}
+              fillOpacity={1} fill="url(#areaGrad)"
+              dot={chartData.length <= 15 ? { r: 3, fill: lineColor, strokeWidth: 0 } : false}
+              activeDot={{ r: 6, fill: '#fff', stroke: lineColor, strokeWidth: 2.5 }}
+              animationDuration={800} animationEasing="ease-out" />
           </AreaChart>
         </ResponsiveContainer>
       </div>
 
-      <p className="text-center text-[9px] font-black text-slate-400 uppercase tracking-[0.4em] mt-6 opacity-40">
-        End-to-End Price Topology · Sorted Sequence
+      <p className={`text-center text-[9px] font-medium mt-3
+        ${isDark ? 'text-slate-600' : 'text-slate-400'}`}>
+        {chartData.length} prices reported · sorted lowest to highest
       </p>
     </div>
   );
