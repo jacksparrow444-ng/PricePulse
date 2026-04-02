@@ -196,15 +196,8 @@ const AnalyticsDashboard = () => {
               >
                 <span className={`text-3xl font-black mt-3 ${isDark ? 'text-cyan-400' : 'text-indigo-500'}`}>₹</span>
                 <span
-                  className="price-hero font-black leading-none text-6xl sm:text-7xl lg:text-[88px]"
-                  style={{
-                    background: isDark
-                      ? 'linear-gradient(135deg, #f8fafc 0%, #38bdf8 55%, #818cf8 100%)'
-                      : 'linear-gradient(135deg, #312e81 0%, #4f46e5 45%, #7c3aed 100%)',
-                    WebkitBackgroundClip: 'text',
-                    WebkitTextFillColor: 'transparent',
-                    backgroundClip: 'text',
-                  }}
+                  className={`price-hero font-black leading-none text-6xl sm:text-7xl lg:text-[88px]
+                    ${isDark ? 'text-white' : 'text-indigo-900'}`}
                 >
                   {avg.toFixed(2)}
                 </span>
