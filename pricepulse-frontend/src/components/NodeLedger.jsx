@@ -74,10 +74,10 @@ const NodeLedger = () => {
                 animate={{ opacity: 1, x: 0 }}
                 exit={{ opacity: 0, scale: 0.97 }}
                 transition={{ duration: 0.2, delay: Math.min(idx * 0.03, 0.3) }}
-                className={`flex justify-between items-center px-3.5 py-3 rounded-xl border transition-all group
+                className={`flex justify-between items-center px-3.5 py-3.5 rounded-xl border transition-all group
                   ${isDark
-                    ? 'bg-white/4 border-white/5 hover:border-white/12 hover:bg-white/7'
-                    : 'bg-white/70 border-slate-200/60 hover:border-indigo-200/80 hover:bg-white shadow-sm hover:shadow-md'
+                    ? 'bg-white/4 border-white/6 hover:border-indigo-500/30 hover:bg-indigo-500/8'
+                    : 'bg-white/70 border-slate-200/60 hover:border-indigo-300/70 hover:bg-indigo-50/70 shadow-sm hover:shadow-md'
                   }`}
                 style={{ transition: 'all 0.2s cubic-bezier(0.16, 1, 0.3, 1)' }}
               >
