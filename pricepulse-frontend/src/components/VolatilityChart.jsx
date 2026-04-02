@@ -146,9 +146,9 @@ const VolatilityChart = () => {
           <AreaChart data={chartData} margin={{ top: 8, right: 4, left: -18, bottom: 0 }}>
             <defs>
               <linearGradient id="areaFill" x1="0" y1="0" x2="0" y2="1">
-                <stop offset="0%" stopColor={lineColor} stopOpacity={0.3} />
-                <stop offset="60%" stopColor={lineColor} stopOpacity={0.08} />
-                <stop offset="100%" stopColor={lineColor} stopOpacity={0} />
+                <stop offset="0%" stopColor={lineColor} stopOpacity={0.4} />
+                <stop offset="55%" stopColor={lineColor} stopOpacity={0.12} />
+                <stop offset="100%" stopColor={lineColor} stopOpacity={0.01} />
               </linearGradient>
             </defs>
 
@@ -167,7 +167,7 @@ const VolatilityChart = () => {
 
             {/* Average reference line */}
             <ReferenceLine y={avg} stroke={lineColor} strokeDasharray="5 5"
-              strokeOpacity={0.45} strokeWidth={1.5} />
+              strokeOpacity={0.55} strokeWidth={2} />
 
             <Tooltip
               content={<CustomTooltip isDark={isDark} />}
@@ -176,14 +176,14 @@ const VolatilityChart = () => {
 
             <Area
               type="monotone" dataKey="price"
-              stroke={lineColor} strokeWidth={2.5}
+              stroke={lineColor} strokeWidth={3.5}
               fillOpacity={1} fill="url(#areaFill)"
               dot={chartData.length <= 20
-                ? { r: 3, fill: lineColor, strokeWidth: 0, opacity: 0.7 }
+                ? { r: 3.5, fill: lineColor, strokeWidth: 0, opacity: 0.8 }
                 : false
               }
-              activeDot={{ r: 7, fill: '#fff', stroke: lineColor, strokeWidth: 2.5, filter: `drop-shadow(0 0 6px ${lineColor})` }}
-              animationDuration={900}
+              activeDot={{ r: 8, fill: '#fff', stroke: lineColor, strokeWidth: 3, filter: `drop-shadow(0 0 10px ${lineColor}) drop-shadow(0 0 4px ${lineColor})` }}
+              animationDuration={1000}
               animationEasing="ease-out"
             />
           </AreaChart>

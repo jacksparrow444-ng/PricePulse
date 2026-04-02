@@ -134,13 +134,13 @@ export default function Footer() {
               </div>
 
               {/* Tech Stack Badges */}
-              <div className="flex flex-wrap gap-2">
+              <div className="flex flex-wrap gap-3">
                 {TECH_STACK.map((tech) => (
                   <span key={tech}
-                    className={`text-[10px] font-black uppercase tracking-widest px-2.5 py-1 rounded-lg border
+                    className={`text-[10px] font-black uppercase tracking-widest px-3 py-1.5 rounded-lg border
                       ${isDark
-                        ? 'bg-white/5 border-white/10 text-slate-400'
-                        : 'bg-indigo-50 border-indigo-200/80 text-indigo-600'
+                        ? 'bg-indigo-500/15 border-indigo-500/25 text-indigo-300'
+                        : 'bg-indigo-100 border-indigo-300/60 text-indigo-700'
                       }`}>
                     {tech}
                   </span>
@@ -150,9 +150,9 @@ export default function Footer() {
 
             {/* RIGHT — Team Grid (2×2) */}
             <div className="flex-1">
-              <p className={`text-[10px] font-black uppercase tracking-widest mb-5 flex items-center gap-2
-                ${isDark ? 'text-slate-600' : 'text-slate-400'}`}>
-                <Zap size={11} /> The Team
+              <p className={`text-xs font-black uppercase tracking-widest mb-5 flex items-center gap-2
+                ${isDark ? 'text-slate-400' : 'text-slate-600'}`}>
+                <Zap size={13} /> The Team
               </p>
               <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
                 {TEAM.map((member, i) => (
@@ -163,10 +163,10 @@ export default function Footer() {
                     transition={{ delay: 0.1 + i * 0.07, duration: 0.4, ease: [0.16, 1, 0.3, 1] }}
                     className={`group relative p-5 rounded-2xl border transition-all duration-300 cursor-default
                       ${isDark
-                        ? `bg-white/5 border-white/8 ${member.borderHover} hover:bg-white/8 hover:shadow-lg hover:shadow-indigo-900/20`
-                        : `bg-white border-slate-200/80 ${member.borderHover} hover:shadow-lg hover:shadow-indigo-100/80`
+                        ? `bg-white/5 border-white/8 hover:border-indigo-500/40 hover:bg-white/8 hover:shadow-xl hover:shadow-indigo-900/30`
+                        : `bg-white border-slate-200/80 hover:border-indigo-400/50 hover:shadow-xl hover:shadow-indigo-100/80`
                       }
-                      hover:scale-[1.025] hover:-translate-y-0.5
+                      hover:scale-[1.03] hover:-translate-y-1
                     `}
                     style={{ transition: 'all 0.25s cubic-bezier(0.16, 1, 0.3, 1)' }}
                   >
@@ -210,7 +210,7 @@ export default function Footer() {
 
                     {/* Hover border glow */}
                     <div className={`absolute inset-0 rounded-2xl opacity-0 group-hover:opacity-100 transition-opacity duration-300 pointer-events-none
-                      border-2 ${isDark ? 'border-indigo-500/20' : 'border-indigo-300/40'}`} />
+                      border-2 ${isDark ? 'border-indigo-500/35' : 'border-indigo-400/50'}`} />
                   </motion.div>
                 ))}
               </div>

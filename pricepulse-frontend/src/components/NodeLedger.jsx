@@ -43,14 +43,14 @@ const NodeLedger = () => {
           <div className="flex gap-1.5 overflow-x-auto pb-0.5 custom-scrollbar">
             {locations.map(loc => (
               <button key={loc} onClick={() => setSelectedLocation(loc)}
-                className={`px-2.5 py-1 text-[8px] font-black uppercase tracking-widest rounded-lg whitespace-nowrap transition-all border
+                className={`px-3 py-1.5 text-[9px] font-black uppercase tracking-widest rounded-lg whitespace-nowrap transition-all border
                   ${selectedLocation === loc
                     ? isDark
-                      ? 'bg-indigo-500 text-white border-indigo-500'
-                      : 'bg-indigo-500 text-white border-indigo-500'
+                      ? 'bg-indigo-500 text-white border-indigo-600 ring-2 ring-indigo-500/30 shadow-md shadow-indigo-900/40'
+                      : 'bg-indigo-500 text-white border-indigo-600 ring-2 ring-indigo-400/30 shadow-md shadow-indigo-200/60'
                     : isDark
                       ? 'text-slate-500 border-white/10 hover:text-slate-300 hover:border-white/20'
-                      : 'text-slate-400 border-slate-200 hover:text-indigo-500 hover:border-indigo-200 bg-white/60'
+                      : 'text-slate-400 border-slate-200 hover:text-indigo-600 hover:border-indigo-300 bg-white/60'
                   }`}
               >
                 {loc}

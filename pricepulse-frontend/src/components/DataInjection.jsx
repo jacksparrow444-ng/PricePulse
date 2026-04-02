@@ -91,14 +91,14 @@ const DataInjection = () => {
     </div>
   );
 
-  const inputClass = `w-full rounded-xl px-4 py-3 outline-none text-sm font-medium transition-all
+  const inputClass = `input-field w-full rounded-xl px-4 py-3.5 outline-none text-sm font-medium transition-all
     ${isDark
-      ? 'bg-white/5 border border-white/10 focus:border-cyan-500/50 text-white placeholder-slate-500'
-      : 'bg-white border border-slate-200 focus:border-indigo-400 text-slate-800 placeholder-slate-400 shadow-sm focus:shadow-indigo-100/60 focus:shadow-md'
+      ? 'bg-white/6 border border-white/12 text-white placeholder-slate-500 focus:border-cyan-500/60 focus:bg-white/10'
+      : 'bg-white border border-slate-200 text-slate-800 placeholder-slate-400 shadow-sm focus:border-indigo-400 focus:shadow-indigo-100/80 focus:shadow-md'
     }`;
 
   return (
-    <div className="glass-panel rounded-2xl p-5">
+    <div className="glass-panel rounded-2xl p-6">
       {/* Header */}
       <div className="flex items-center gap-3 mb-5">
         <div className={`w-9 h-9 rounded-xl flex items-center justify-center
@@ -219,12 +219,13 @@ const DataInjection = () => {
         <button
           type="submit"
           disabled={isSubmitting || !formData.product_name}
-          className={`w-full py-3.5 rounded-xl font-black text-sm text-white transition-all
-            disabled:opacity-50 flex items-center justify-center gap-2 shadow-lg
+          className={`w-full py-4 rounded-xl font-black text-base text-white transition-all btn-primary
+            disabled:opacity-50 flex items-center justify-center gap-2
             ${isDark
-              ? 'bg-gradient-to-r from-cyan-500 to-blue-600 hover:from-cyan-400 hover:to-blue-500 shadow-cyan-500/25 hover:scale-[1.02] active:scale-95'
-              : 'bg-gradient-to-r from-indigo-500 to-violet-600 hover:from-indigo-400 hover:to-violet-500 shadow-indigo-400/30 hover:scale-[1.02] active:scale-95'
-            }`}
+              ? 'bg-gradient-to-r from-cyan-500 to-blue-600 hover:from-cyan-400 hover:to-blue-500 shadow-[0_4px_20px_rgba(6,182,212,0.35)] hover:shadow-[0_8px_30px_rgba(6,182,212,0.45)]'
+              : 'bg-gradient-to-r from-indigo-500 to-violet-600 hover:from-indigo-400 hover:to-violet-500 shadow-[0_4px_20px_rgba(99,102,241,0.35)] hover:shadow-[0_8px_30px_rgba(99,102,241,0.45)]'
+            }
+            hover:scale-[1.02] active:scale-95`}
         >
           {isSubmitting
             ? <><Loader2 size={16} className="animate-spin" /> Submitting...</>

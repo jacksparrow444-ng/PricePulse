@@ -83,8 +83,8 @@ function App() {
             <div className="absolute top-[40%] right-[20%] w-[30%] h-[30%] opacity-25 blur-[80px] rounded-full animate-[pulse_7s_ease-in-out_infinite]"
               style={{ background: 'radial-gradient(circle, rgba(56,189,248,0.35) 0%, transparent 70%)' }} />
             {/* Subtle dot grid */}
-            <div className="absolute inset-0 opacity-[0.35]"
-              style={{ backgroundImage: 'radial-gradient(rgba(99,102,241,0.25) 1px, transparent 1px)', backgroundSize: '28px 28px' }} />
+            <div className="absolute inset-0 opacity-[0.45]"
+              style={{ backgroundImage: 'radial-gradient(rgba(99,102,241,0.28) 1px, transparent 1px)', backgroundSize: '28px 28px' }} />
           </>
         )}
       </div>
