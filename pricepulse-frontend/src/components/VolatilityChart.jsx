@@ -84,15 +84,15 @@ const VolatilityChart = () => {
       {/* Header */}
       <div className="flex justify-between items-start mb-4 gap-3 flex-wrap">
         <div>
-          <p className={`text-[10px] font-black uppercase tracking-widest flex items-center gap-1.5 mb-1.5
+          <p className={`text-[11px] font-black uppercase tracking-widest flex items-center gap-1.5 mb-1.5
             ${isDark ? 'text-slate-400' : 'text-indigo-500'}`}>
-            <BarChart2 size={12} /> Price History
+            <BarChart2 size={14} /> Price History
           </p>
           <div className="flex items-center gap-2">
-            <span className={`${trendCls} flex items-center gap-1.5 text-[10px] font-black px-2.5 py-1 rounded-lg`}>
-              <TrendIcon size={11} /> {trendLabel}
+            <span className={`${trendCls} flex items-center gap-1.5 text-[11px] font-black px-2.5 py-1 rounded-lg`}>
+              <TrendIcon size={12} /> {trendLabel}
             </span>
-            <span className={`font-mono text-[10px] font-bold px-2 py-1 rounded-lg border
+            <span className={`font-mono text-[11px] font-bold px-2 py-1 rounded-lg border
               ${isDark ? 'border-white/10 text-slate-400' : 'border-slate-200 text-slate-500'}`}>
               {parseFloat(trend?.pct) > 0 ? '+' : ''}{trend?.pct}%
             </span>
@@ -106,14 +106,14 @@ const VolatilityChart = () => {
             <p className={`text-[8px] font-bold uppercase tracking-widest mb-1 ${isDark ? 'text-slate-600' : 'text-slate-400'}`}>
               Price Spread
             </p>
-            <p className="font-mono text-xs font-black text-rose-500">{volatility.toFixed(1)}%</p>
+            <p className="font-mono text-sm font-black text-rose-500">{volatility.toFixed(1)}%</p>
           </div>
           <div className={`w-px ${isDark ? 'bg-white/10' : 'bg-slate-200'}`} />
           <div className="text-right">
             <p className={`text-[8px] font-bold uppercase tracking-widest mb-1 ${isDark ? 'text-slate-600' : 'text-slate-400'}`}>
               Consistency
             </p>
-            <p className={`font-mono text-xs font-black ${isDark ? 'text-cyan-400' : 'text-indigo-600'}`}>
+            <p className={`font-mono text-sm font-black ${isDark ? 'text-cyan-400' : 'text-indigo-600'}`}>
               {stability.toFixed(1)}%
             </p>
           </div>
@@ -129,19 +129,19 @@ const VolatilityChart = () => {
           { label: `${chartData.length} reports`, val: null, plain: true },
         ].map(({ label, val, cls, plain }) => (
           <div key={label}
-            className={`flex items-center gap-1.5 px-3 py-1.5 rounded-lg text-[10px] font-bold border
+            className={`flex items-center gap-2 px-3 py-2 rounded-lg text-xs font-bold border
               ${plain
                 ? isDark ? 'border-white/10 text-slate-500' : 'border-slate-200 text-slate-400 bg-slate-50'
                 : cls
               }`}>
             <span className="opacity-60">{label}</span>
-            {val !== null && <span className="font-mono font-black">₹{parseFloat(val).toFixed(0)}</span>}
+            {val !== null && <span className="font-mono font-black text-sm">₹{parseFloat(val).toFixed(0)}</span>}
           </div>
         ))}
       </div>
 
       {/* ── CHART ──────────────────────────────────────────────── */}
-      <div style={{ height: 200 }}>
+      <div style={{ height: 260 }}>
         <ResponsiveContainer width="100%" height="100%">
           <AreaChart data={chartData} margin={{ top: 8, right: 4, left: -18, bottom: 0 }}>
             <defs>

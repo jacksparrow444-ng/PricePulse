@@ -30,13 +30,13 @@ const NodeLedger = () => {
       initial={{ opacity: 0, y: 20 }}
       animate={{ opacity: 1, y: 0 }}
       transition={{ duration: 0.5, delay: 0.2, ease: [0.16, 1, 0.3, 1] }}
-      className="glass-panel p-5 rounded-2xl flex flex-col h-full max-h-[420px]"
+      className="glass-panel card-hover p-6 rounded-2xl flex flex-col h-full max-h-[500px]"
     >
       {/* Header */}
       <div className="flex justify-between items-center mb-4 gap-2">
-        <h3 className={`text-[10px] font-black uppercase tracking-widest flex items-center gap-2
+        <h3 className={`text-[11px] font-black uppercase tracking-widest flex items-center gap-2
           ${isDark ? 'text-slate-400' : 'text-indigo-500'}`}>
-          <List size={13} /> Store Prices
+          <List size={14} /> Store Prices
         </h3>
         {/* Location filter pills */}
         {locations.length > 2 && (
@@ -87,7 +87,7 @@ const NodeLedger = () => {
                     <Store size={14} className={isDark ? 'text-slate-500' : 'text-indigo-400'} />
                   </div>
                   <div className="min-w-0">
-                    <p className={`font-semibold text-[12px] truncate ${isDark ? 'text-slate-200' : 'text-slate-700'}`}>
+                    <p className={`font-semibold text-sm truncate ${isDark ? 'text-slate-200' : 'text-slate-700'}`}>
                       {shop.store_name}
                     </p>
                     <p className={`text-[9px] flex items-center gap-1 mt-0.5 ${isDark ? 'text-slate-600' : 'text-slate-400'}`}>
@@ -97,7 +97,7 @@ const NodeLedger = () => {
                 </div>
 
                 <div className="text-right flex-shrink-0 ml-3 flex flex-col items-end gap-1">
-                  <p className={`font-mono text-sm font-black ${isDark ? 'text-white' : 'text-slate-800'}`}>
+                    <p className={`font-mono text-base font-black ${isDark ? 'text-white' : 'text-slate-800'}`}>
                     ₹{price.toFixed(2)}
                   </p>
                   <div className={`${tag.cls} px-2 py-0.5 rounded-md text-[7px] font-black uppercase tracking-wide`}>

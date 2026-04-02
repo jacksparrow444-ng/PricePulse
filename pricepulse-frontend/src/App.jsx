@@ -121,8 +121,8 @@ function App() {
                       { label: 'Shops', val: systemStats.total_vendors, color: isDark ? 'text-emerald-400' : 'text-emerald-600' },
                     ].map((stat, i) => (
                       <div key={i} className={`text-center ${i > 0 ? 'border-l border-slate-200 dark:border-white/10' : ''}`}>
-                        <p className="text-[8px] font-bold text-slate-400 uppercase tracking-widest mb-1">{stat.label}</p>
-                        <p className={`font-mono font-black text-[13px] ${stat.color}`}>{stat.val}</p>
+                        <p className="text-[10px] font-bold text-slate-400 uppercase tracking-widest mb-1">{stat.label}</p>
+                        <p className={`font-mono font-black text-base ${stat.color}`}>{stat.val}</p>
                       </div>
                     ))}
                   </div>
@@ -140,10 +140,8 @@ function App() {
               {analytics ? (
                 <div className="space-y-6 animate-in fade-in zoom-in-95 duration-500">
                   <AnalyticsDashboard />
-                  <div className="grid grid-cols-1 xl:grid-cols-2 gap-6">
-                    <VolatilityChart />
-                    <NodeLedger />
-                  </div>
+                  <VolatilityChart />
+                  <NodeLedger />
                 </div>
               ) : (
                 <div className="glass-panel h-full min-h-[480px] rounded-[2.5rem] flex flex-col items-center justify-center p-12 text-center relative overflow-hidden">
