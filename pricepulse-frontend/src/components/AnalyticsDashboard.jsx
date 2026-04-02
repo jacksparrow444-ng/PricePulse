@@ -187,7 +187,7 @@ const AnalyticsDashboard = () => {
             <p className={`text-[10px] font-bold uppercase tracking-widest mb-2 ${isDark ? 'text-slate-500' : 'text-slate-400'}`}>
               Average market price
             </p>
-            <div className="flex items-end gap-4 flex-wrap">
+            <div className="flex items-center gap-4 flex-wrap">
               <motion.div
                 initial={{ scale: 0.85, opacity: 0 }}
                 animate={{ scale: 1, opacity: 1 }}
@@ -247,7 +247,7 @@ const AnalyticsDashboard = () => {
             {/* "Why?" button */}
             <button
               onClick={() => setShowWhyModal(true)}
-              className={`flex-shrink-0 flex items-center gap-1 text-[9px] font-black uppercase tracking-wider px-2.5 py-1.5 rounded-lg border transition-colors
+              className={`flex-shrink-0 flex items-center gap-1 text-[9px] font-black uppercase tracking-wider px-2.5 py-1.5 rounded-lg border transition-all hover:scale-105 active:scale-95
                 ${aiCls.icon} ${aiCls.text} hover:opacity-90`}
             >
               <HelpCircle size={11} /> Why?
@@ -320,7 +320,8 @@ const AnalyticsDashboard = () => {
           >
             <div className="absolute right-0 top-0 w-28 h-28 rounded-full pointer-events-none blur-3xl opacity-30"
               style={{ background: isDark ? 'rgba(139,92,246,0.4)' : 'rgba(99,102,241,0.15)' }} />
-            <div className="relative hover:scale-105 transition-transform duration-300" style={{ width: 116, height: 116 }}>
+            <div className="tooltip-wrap relative hover:scale-105 transition-transform duration-300" style={{ width: 116, height: 116 }}>
+            <span className="tooltip-tip">{analytics.total_samples} reports = {confidenceScore}% confidence</span>
               <PieChart width={116} height={116}>
                 <Pie data={pieData} cx={58} cy={58} innerRadius={34} outerRadius={52}
                   dataKey="value" startAngle={90} endAngle={-270} stroke="none">

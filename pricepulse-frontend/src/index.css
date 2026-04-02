@@ -101,7 +101,10 @@ button, input, select, textarea {
   transition: transform 0.25s cubic-bezier(0.16, 1, 0.3, 1), box-shadow 0.3s ease;
 }
 .card-hover:hover {
-  transform: translateY(-2px) scale(1.005);
+  transform: translateY(-3px) scale(1.018);
+}
+.card-hover:active {
+  transform: scale(0.98);
 }
 
 /* ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
@@ -110,6 +113,10 @@ button, input, select, textarea {
 .btn-primary {
   position: relative;
   overflow: hidden;
+  transition: transform 0.2s cubic-bezier(0.16, 1, 0.3, 1), box-shadow 0.2s ease;
+}
+.btn-primary:hover {
+  transform: scale(1.02) translateY(-1px);
 }
 .btn-primary::after {
   content: '';
@@ -124,7 +131,7 @@ button, input, select, textarea {
   opacity: 1;
 }
 .btn-primary:active {
-  transform: scale(0.97);
+  transform: scale(0.96);
 }
 
 /* ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
@@ -180,13 +187,41 @@ button, input, select, textarea {
 ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━ */
 .input-field:focus {
   outline: none;
-  border-color: rgba(99, 102, 241, 0.5);
-  box-shadow: 0 0 0 3px rgba(99, 102, 241, 0.1);
+  border-color: rgba(99, 102, 241, 0.6);
+  box-shadow: 0 0 0 4px rgba(99, 102, 241, 0.12), 0 1px 4px rgba(99, 102, 241, 0.08);
 }
 .dark .input-field:focus {
-  border-color: rgba(34, 211, 238, 0.4);
-  box-shadow: 0 0 0 3px rgba(34, 211, 238, 0.08);
+  border-color: rgba(34, 211, 238, 0.5);
+  box-shadow: 0 0 0 4px rgba(34, 211, 238, 0.1), 0 1px 4px rgba(34, 211, 238, 0.06);
 }
+
+/* Left border accent for store cards */
+.accent-success { border-left: 3px solid #10b981; }
+.accent-neutral  { border-left: 3px solid #6366f1; }
+.accent-warning  { border-left: 3px solid #f59e0b; }
+.accent-danger   { border-left: 3px solid #ef4444; }
+
+/* Tooltip */
+.tooltip-wrap { position: relative; }
+.tooltip-tip {
+  position: absolute;
+  bottom: calc(100% + 8px);
+  left: 50%;
+  transform: translateX(-50%);
+  white-space: nowrap;
+  background: rgba(15,17,24,0.95);
+  color: #e2e8f0;
+  font-size: 10px;
+  font-weight: 700;
+  padding: 5px 10px;
+  border-radius: 8px;
+  pointer-events: none;
+  opacity: 0;
+  transition: opacity 0.15s ease;
+  z-index: 100;
+  border: 1px solid rgba(255,255,255,0.08);
+}
+.tooltip-wrap:hover .tooltip-tip { opacity: 1; }
 
 /* Glow utilities */
 .glow-cyan { box-shadow: 0 0 0 3px rgba(6,182,212,0.12), 0 0 20px rgba(6,182,212,0.15); }
