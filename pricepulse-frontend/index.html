@@ -3,41 +3,78 @@
   <head>
     <meta charset="UTF-8" />
     <link rel="icon" type="image/svg+xml" href="/favicon.svg" />
-
-    <!-- FIXED: removed user-scalable=no (accessibility issue) -->
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-
-    <!-- SEO Meta Tags -->
     <meta name="description" content="PricePulse — Compare real grocery prices reported by your community. Find the best deals near you on milk, oil, atta, and more." />
     <meta name="keywords" content="price comparison, grocery prices, community prices, best deals, PricePulse" />
     <meta name="author" content="Pokemon Team" />
-
-    <!-- Open Graph -->
     <meta property="og:title" content="PricePulse — Live Price Tracker" />
     <meta property="og:description" content="Know before you buy. Real prices, reported by real people." />
     <meta property="og:type" content="website" />
-
     <meta name="theme-color" content="#6366f1" />
     <link rel="manifest" href="/manifest.json" />
     <link rel="apple-touch-icon" href="/favicon.svg" />
     <title>PricePulse — Live Price Tracker</title>
 
-    <!-- FIXED: Google Fonts via link tags (non-render-blocking) instead of CSS @import -->
+    <!-- Non-blocking fonts -->
     <link rel="preconnect" href="https://fonts.googleapis.com" />
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
-    <link
-      rel="stylesheet"
-      href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800;900&display=swap"
-      media="print"
-      onload="this.media='all'"
-    />
-    <noscript>
-      <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800;900&display=swap" />
-    </noscript>
+    <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800;900&display=swap" media="print" onload="this.media='all'" />
+    <noscript><link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800;900&display=swap" /></noscript>
+
+    <!-- ── CRITICAL INLINE CSS — paints BEFORE any JS loads ── -->
+    <style>
+      *{box-sizing:border-box;margin:0;padding:0}
+      html,body{height:100%;font-family:'Inter',system-ui,sans-serif;background:#050508}
+
+      /* Inline splash — visible with ZERO JS */
+      #inline-splash{
+        position:fixed;inset:0;z-index:9999;
+        display:flex;flex-direction:column;align-items:center;justify-content:center;
+        background:linear-gradient(135deg,#050508 0%,#0d0f18 100%);
+        transition:opacity 0.4s ease,transform 0.4s ease;
+      }
+      #inline-splash.hide{opacity:0;transform:scale(1.04);pointer-events:none}
+
+      .sp-logo{
+        display:flex;align-items:center;gap:12px;margin-bottom:24px;
+      }
+      .sp-icon{
+        width:44px;height:44px;border-radius:14px;
+        background:linear-gradient(135deg,#06b6d4,#3b82f6);
+        display:flex;align-items:center;justify-content:center;
+        box-shadow:0 0 32px rgba(6,182,212,0.4);
+        font-size:20px;
+      }
+      .sp-text{font-size:26px;font-weight:900;color:#fff;letter-spacing:-0.04em}
+      .sp-text span{color:#22d3ee}
+
+      .sp-sub{font-size:11px;font-weight:700;color:rgba(100,116,139,0.8);
+        letter-spacing:0.18em;text-transform:uppercase;margin-bottom:36px}
+
+      /* Spinner */
+      .sp-ring{
+        width:36px;height:36px;border-radius:50%;
+        border:3px solid rgba(99,102,241,0.15);
+        border-top-color:#6366f1;
+        animation:sp-spin 0.9s linear infinite;
+      }
+      @keyframes sp-spin{to{transform:rotate(360deg)}}
+    </style>
   </head>
   <body>
-    <!-- FIXED: main landmark for accessibility -->
+
+    <!-- ── INLINE SPLASH — renders with ZERO JS (instant FCP) ── -->
+    <div id="inline-splash" aria-label="Loading PricePulse" role="status">
+      <div class="sp-logo">
+        <div class="sp-icon">⚡</div>
+        <div class="sp-text">Price<span>Pulse</span></div>
+      </div>
+      <p class="sp-sub">Live Price Tracker</p>
+      <div class="sp-ring"></div>
+    </div>
+
     <div id="root" role="main"></div>
+
     <script type="module" src="/src/main.jsx"></script>
     <script>
       if ('serviceWorker' in navigator) {
