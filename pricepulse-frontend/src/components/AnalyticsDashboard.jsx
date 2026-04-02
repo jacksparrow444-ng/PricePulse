@@ -1,8 +1,9 @@
 import React from 'react';
 import jsPDF from 'jspdf';
 import autoTable from 'jspdf-autotable';
-import { ShieldCheck, Info, Image as ImageIcon, DownloadCloud } from 'lucide-react';
+import { ShieldCheck, Info, Image as ImageIcon, DownloadCloud, TrendingDown, TrendingUp } from 'lucide-react';
 import { PieChart, Pie, Cell } from 'recharts';
+import { motion } from 'framer-motion';
 import { usePrice } from '../context/PriceContext';
 
 const AnalyticsDashboard = () => {
@@ -16,34 +17,23 @@ const AnalyticsDashboard = () => {
       const doc = new jsPDF({ orientation: 'portrait', unit: 'mm', format: 'a4' });
       const pageW = doc.internal.pageSize.getWidth();
       const pageH = doc.internal.pageSize.getHeight();
-
-      // Header
       doc.setFillColor(99, 102, 241);
       doc.rect(0, 0, pageW, 32, 'F');
       doc.setFillColor(79, 70, 229);
       doc.rect(0, 26, pageW, 6, 'F');
       doc.setTextColor(255, 255, 255);
-      doc.setFontSize(22);
-      doc.setFont('helvetica', 'bold');
+      doc.setFontSize(22); doc.setFont('helvetica', 'bold');
       doc.text('PRICEPULSE', 14, 18);
-      doc.setFontSize(8);
-      doc.setFont('helvetica', 'normal');
+      doc.setFontSize(8); doc.setFont('helvetica', 'normal');
       doc.setTextColor(220, 220, 255);
       doc.text('PRICE REPORT', 14, 26);
       doc.text(`Generated: ${new Date().toLocaleString()}`, pageW - 14, 26, { align: 'right' });
-
-      // Product Info
       doc.setTextColor(20, 20, 40);
-      doc.setFontSize(20);
-      doc.setFont('helvetica', 'bold');
+      doc.setFontSize(20); doc.setFont('helvetica', 'bold');
       doc.text(analytics.product_name || 'Unknown Product', 14, 50);
-      doc.setFontSize(9);
-      doc.setFont('helvetica', 'normal');
-      doc.setTextColor(100, 110, 130);
+      doc.setFontSize(9); doc.setFont('helvetica', 'normal'); doc.setTextColor(100, 110, 130);
       doc.text(`Product ID: ${analytics.product_id || searchId}`, 14, 58);
       doc.text(`Category: ${analytics.category || 'General'}`, 14, 64);
-
-      // KPI Boxes
       const kpiY = 74, kpiH = 22, kpiW = (pageW - 28 - 6) / 3;
       [
         { label: 'AVERAGE PRICE', value: `INR ${parseFloat(analytics.average_price).toFixed(2)}`, accent: [99, 102, 241] },
@@ -53,30 +43,26 @@ const AnalyticsDashboard = () => {
         const x = 14 + i * (kpiW + 3);
         doc.setFillColor(...kpi.accent);
         doc.roundedRect(x, kpiY, kpiW, kpiH, 3, 3, 'F');
-        doc.setTextColor(255, 255, 255);
-        doc.setFontSize(7); doc.setFont('helvetica', 'bold');
+        doc.setTextColor(255, 255, 255); doc.setFontSize(7); doc.setFont('helvetica', 'bold');
         doc.text(kpi.label, x + kpiW / 2, kpiY + 7, { align: 'center' });
         doc.setFontSize(11);
         doc.text(kpi.value, x + kpiW / 2, kpiY + 16, { align: 'center' });
       });
-
       const volatility = ((analytics.max_price - analytics.min_price) / analytics.average_price * 100).toFixed(1);
       const confScore = Math.min(Math.round((analytics.total_samples / 30) * 100), 100);
-
       autoTable(doc, {
         startY: kpiY + kpiH + 8,
         head: [['Detail', 'Value']],
         body: [
           ['Product Name', analytics.product_name || 'N/A'],
           ['Product ID', String(analytics.product_id || searchId)],
-          ['Average Community Price', `INR ${parseFloat(analytics.average_price).toFixed(2)}`],
-          ['Lowest Price Found', `INR ${parseFloat(analytics.min_price).toFixed(2)}`],
-          ['Highest Price Found', `INR ${parseFloat(analytics.max_price).toFixed(2)}`],
+          ['Average Price', `INR ${parseFloat(analytics.average_price).toFixed(2)}`],
+          ['Lowest Price', `INR ${parseFloat(analytics.min_price).toFixed(2)}`],
+          ['Highest Price', `INR ${parseFloat(analytics.max_price).toFixed(2)}`],
           ['Fair Buy Range (Low)', `INR ${parseFloat(analytics.fair_range?.low || 0).toFixed(2)}`],
           ['Fair Buy Range (High)', `INR ${parseFloat(analytics.fair_range?.high || 0).toFixed(2)}`],
-          ['Price Spread', `${volatility}%`],
-          ['Data Confidence', `${confScore}%`],
-          ['Total Reports', `${analytics.total_samples} reports`],
+          ['Price Spread', `${volatility}%`], ['Data Confidence', `${confScore}%`],
+          ['Total Reports', `${analytics.total_samples}`],
           ['Category', analytics.category || 'General'],
         ],
         headStyles: { fillColor: [99, 102, 241], textColor: 255, fontStyle: 'bold', fontSize: 9 },
@@ -85,174 +71,239 @@ const AnalyticsDashboard = () => {
         columnStyles: { 0: { fontStyle: 'bold', cellWidth: 75 } },
         margin: { left: 14, right: 14 },
       });
-
       const finalY = doc.lastAutoTable.finalY + 12;
-      doc.setFillColor(245, 246, 255);
-      doc.rect(14, finalY, pageW - 28, 18, 'F');
-      doc.setTextColor(100, 110, 140);
-      doc.setFontSize(8); doc.setFont('helvetica', 'bold');
+      doc.setFillColor(245, 246, 255); doc.rect(14, finalY, pageW - 28, 18, 'F');
+      doc.setTextColor(100, 110, 140); doc.setFontSize(8); doc.setFont('helvetica', 'bold');
       doc.text('Pokemon Team', 18, finalY + 7);
       doc.setFont('helvetica', 'normal'); doc.setFontSize(7);
       doc.text('Lead: Nirmal Kumar  |  Dev: Tanishq  |  Design: Taniya Singla  |  QA: Tanisha Dua', 18, finalY + 13);
       doc.setTextColor(180, 190, 200);
       doc.text('Auto-generated by PricePulse. Community data only.', pageW / 2, pageH - 8, { align: 'center' });
-
-      doc.save(`PricePulse_${analytics.product_name?.replace(/\s+/g, '_')}_${analytics.product_id || searchId}.pdf`);
+      doc.save(`PricePulse_${(analytics.product_name || 'product').replace(/\s+/g,'_')}_${analytics.product_id || searchId}.pdf`);
     } catch (err) {
-      console.error('PDF failed:', err);
       alert('Could not generate PDF. Try again.');
     }
   };
 
   const confidenceScore = Math.min(Math.round((analytics.total_samples / 30) * 100), 100);
   const PIE_COLORS = isDark ? ['#22d3ee', '#1e293b'] : ['#6366f1', '#e0e7ff'];
-  const pieData = [{ name: 'Conf', value: confidenceScore }, { name: 'Rem', value: 100 - confidenceScore }];
+  const pieData = [{ value: confidenceScore }, { value: 100 - confidenceScore }];
   const volatilityIndex = ((analytics.max_price - analytics.min_price) / analytics.average_price * 100);
+  const avg = parseFloat(analytics.average_price);
+  const minP = parseFloat(analytics.min_price);
+  const maxP = parseFloat(analytics.max_price);
 
-  let marketStatus = {
-    text: '🟢 Stable Prices',
-    color: isDark ? 'text-emerald-400' : 'text-emerald-700',
-    border: isDark ? 'border-emerald-500/20' : 'border-emerald-200',
-    bg: isDark ? 'bg-emerald-500/10' : 'bg-emerald-50',
-  };
-  if (volatilityIndex > 20) marketStatus = {
-    text: '🔴 Prices Vary a Lot',
-    color: isDark ? 'text-rose-400' : 'text-rose-700',
-    border: isDark ? 'border-rose-500/20' : 'border-rose-200',
-    bg: isDark ? 'bg-rose-500/10' : 'bg-rose-50',
-  };
-  else if (volatilityIndex > 10) marketStatus = {
-    text: '🟡 Slightly Unstable',
-    color: isDark ? 'text-amber-400' : 'text-amber-700',
-    border: isDark ? 'border-amber-400/20' : 'border-amber-200',
-    bg: isDark ? 'bg-amber-400/10' : 'bg-amber-50',
-  };
+  // Semantic market status using design system tokens
+  let marketStatus = { text: '🟢 Stable Prices', cls: 'tag-success' };
+  if (volatilityIndex > 20) marketStatus = { text: '🔴 Prices Vary a Lot', cls: 'tag-danger' };
+  else if (volatilityIndex > 10) marketStatus = { text: '🟡 Slightly Unstable', cls: 'tag-warning' };
+
+  // Is current community price a good deal?
+  const priceSaving = maxP - avg;
+  const savingPct = ((priceSaving / maxP) * 100).toFixed(0);
 
   return (
-    <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
-      {/* Main price card */}
-      <div className="md:col-span-2 glass-panel p-7 rounded-2xl relative overflow-hidden">
-        <div className="absolute -right-16 -top-16 w-64 h-64 rounded-full blur-3xl opacity-50 pointer-events-none"
-          style={{ background: isDark ? 'rgba(34,211,238,0.06)' : 'rgba(99,102,241,0.08)' }} />
+    <div className="grid grid-cols-1 md:grid-cols-3 gap-4 fade-up">
+      {/* ── MAIN PRICE CARD ─────────────────────────────────────── */}
+      <motion.div
+        initial={{ opacity: 0, y: 20 }}
+        animate={{ opacity: 1, y: 0 }}
+        transition={{ duration: 0.5, ease: [0.16, 1, 0.3, 1] }}
+        className="md:col-span-2 glass-panel card-hover p-7 rounded-2xl relative overflow-hidden"
+      >
+        {/* Background glow orb */}
+        <div className="absolute -right-16 -top-16 w-60 h-60 rounded-full pointer-events-none"
+          style={{ background: isDark ? 'radial-gradient(circle, rgba(34,211,238,0.07) 0%, transparent 70%)' : 'radial-gradient(circle, rgba(99,102,241,0.08) 0%, transparent 70%)' }} />
 
-        {/* Top row: verified badge + actions */}
+        {/* Top badges row */}
         <div className="flex justify-between items-start mb-5 flex-wrap gap-2 relative z-10">
-          <p className={`text-[10px] font-bold uppercase tracking-widest flex items-center gap-1.5 px-3 py-1.5 rounded-full border
-            ${isDark
-              ? 'bg-emerald-500/10 border-emerald-500/20 text-emerald-400'
-              : 'bg-emerald-50 border-emerald-200 text-emerald-700'
-            }`}>
-            <ShieldCheck size={12} /> Community Average Price
-          </p>
+          <div className="flex items-center gap-2 flex-wrap">
+            <span className="tag-success text-[10px] font-black uppercase tracking-widest px-3 py-1.5 rounded-full flex items-center gap-1.5">
+              <ShieldCheck size={11} /> Community Average
+            </span>
+            {priceSaving > 0 && (
+              <span className="tag-neutral text-[10px] font-black uppercase tracking-widest px-2.5 py-1.5 rounded-full flex items-center gap-1">
+                <TrendingDown size={10} /> {savingPct}% below max
+              </span>
+            )}
+          </div>
           <div className="flex items-center gap-2">
             <span className={`text-[10px] font-bold px-2.5 py-1.5 rounded-lg border border-dashed
-              ${isDark ? 'text-slate-400 bg-white/5 border-white/10' : 'text-slate-500 bg-white/60 border-slate-300'}`}>
+              ${isDark ? 'text-slate-400 border-white/10' : 'text-slate-400 border-slate-300/60'}`}>
               ID: {searchId}
             </span>
-            <button
-              onClick={handleDownloadPDF}
-              className={`flex items-center gap-1.5 text-[10px] font-bold uppercase tracking-wide px-3 py-1.5 rounded-lg border transition-all
+            <button onClick={handleDownloadPDF}
+              className={`btn-primary flex items-center gap-1.5 text-[10px] font-bold px-3 py-1.5 rounded-lg transition-all
                 ${isDark
-                  ? 'bg-cyan-500/10 border-cyan-500/20 text-cyan-400 hover:bg-cyan-500 hover:text-white'
-                  : 'bg-indigo-50 border-indigo-200 text-indigo-600 hover:bg-indigo-500 hover:text-white'
-                }`}
-              title="Download PDF Report"
-            >
-              <DownloadCloud size={13} /> PDF Report
+                  ? 'bg-indigo-500/10 border border-indigo-500/20 text-indigo-400 hover:bg-indigo-500 hover:text-white'
+                  : 'bg-indigo-50 border border-indigo-200 text-indigo-600 hover:bg-indigo-500 hover:text-white'
+                }`}>
+              <DownloadCloud size={12} /> PDF
             </button>
           </div>
         </div>
 
         {/* Product name */}
-        <h3 className={`text-xl font-black tracking-tight mb-2 relative z-10 ${isDark ? 'text-white' : 'text-slate-900'}`}>
+        <p className={`text-sm font-semibold mb-1 relative z-10 ${isDark ? 'text-slate-400' : 'text-slate-500'}`}>
+          {analytics.category || 'Product'}
+        </p>
+        <h3 className={`text-xl font-black tracking-tight mb-5 relative z-10 ${isDark ? 'text-white' : 'text-slate-900'}`}>
           {analytics.product_name}
         </h3>
 
-        {/* Big price */}
-        <div className="relative z-10 mb-4">
-          <h2 className={`text-6xl sm:text-7xl font-black tracking-tighter leading-none flex items-start
-            ${isDark ? 'text-white' : 'text-slate-900'}`}>
-            <span className={`text-3xl pr-1 translate-y-2 ${isDark ? 'text-cyan-400' : 'text-indigo-500'}`}>₹</span>
-            <span className="tabular-nums">{parseFloat(analytics.average_price).toFixed(2)}</span>
-          </h2>
+        {/* ── HERO PRICE — Most prominent element ──────────── */}
+        <div className="relative z-10 mb-6">
+          <p className={`text-[10px] font-bold uppercase tracking-widest mb-2 ${isDark ? 'text-slate-500' : 'text-slate-400'}`}>
+            Average market price
+          </p>
+          <motion.div
+            initial={{ scale: 0.85, opacity: 0 }}
+            animate={{ scale: 1, opacity: 1 }}
+            transition={{ duration: 0.6, ease: [0.16, 1, 0.3, 1], delay: 0.1 }}
+            className="flex items-start gap-2"
+          >
+            <span className={`text-4xl font-black mt-2 ${isDark ? 'text-cyan-400' : 'text-indigo-500'}`}>₹</span>
+            <span className={`price-hero font-black leading-none ${isDark ? 'text-white price-glow-dark' : 'text-slate-900 price-glow-light'}
+              text-6xl sm:text-7xl lg:text-[88px]`}>
+              {parseFloat(analytics.average_price).toFixed(2)}
+            </span>
+          </motion.div>
         </div>
 
-        {/* Fair price range */}
-        <div className="relative z-10 mb-2">
-          <p className={`text-[10px] font-bold uppercase tracking-widest mb-2 flex items-center gap-1
-            ${isDark ? 'text-slate-500' : 'text-slate-400'}`}>
-            Fair Price Range <Info size={10} />
-          </p>
-          <div className="flex items-center gap-2 flex-wrap">
-            <span className={`text-sm font-black px-3 py-1.5 rounded-lg tabular-nums border
+        {/* ── PRICE RANGE VISUAL ───────────────────────────── */}
+        <div className="relative z-10 mb-6">
+          <div className="flex items-center justify-between mb-2">
+            <p className={`text-[10px] font-bold uppercase tracking-widest flex items-center gap-1
+              ${isDark ? 'text-slate-500' : 'text-slate-400'}`}>
+              Fair Price Range <Info size={10} />
+            </p>
+          </div>
+          {/* Visual range bar */}
+          <div className={`relative h-2 rounded-full mb-3 ${isDark ? 'bg-white/10' : 'bg-slate-100'}`}>
+            <div className="absolute inset-y-0 rounded-full bg-gradient-to-r from-emerald-400 to-rose-400"
+              style={{
+                left: `${((parseFloat(analytics.fair_range?.low || 0) - minP) / (maxP - minP || 1)) * 100}%`,
+                right: `${100 - ((parseFloat(analytics.fair_range?.high || 0) - minP) / (maxP - minP || 1)) * 100}%`,
+              }} />
+            {/* Average marker */}
+            <div className="absolute top-1/2 -translate-y-1/2 -translate-x-1/2 w-3 h-3 rounded-full border-2 border-white shadow-md"
+              style={{
+                left: `${((avg - minP) / (maxP - minP || 1)) * 100}%`,
+                background: isDark ? '#22d3ee' : '#6366f1',
+              }} />
+          </div>
+          <div className="flex items-center gap-3 flex-wrap">
+            <div className={`flex items-center gap-1.5 text-xs font-black px-3 py-1.5 rounded-xl border
               ${isDark ? 'bg-emerald-500/10 border-emerald-500/20 text-emerald-400' : 'bg-emerald-50 border-emerald-200 text-emerald-700'}`}>
-              ₹ {parseFloat(analytics.fair_range.low).toFixed(2)}
-            </span>
-            <span className="text-slate-400 text-lg">—</span>
-            <span className={`text-sm font-black px-3 py-1.5 rounded-lg tabular-nums border
+              <TrendingDown size={12} />₹ {parseFloat(analytics.fair_range?.low || 0).toFixed(2)}
+              <span className={`text-[9px] font-medium opacity-60`}>low</span>
+            </div>
+            <span className={isDark ? 'text-slate-700' : 'text-slate-300'}>—</span>
+            <div className={`flex items-center gap-1.5 text-xs font-black px-3 py-1.5 rounded-xl border
               ${isDark ? 'bg-rose-500/10 border-rose-500/20 text-rose-400' : 'bg-rose-50 border-rose-200 text-rose-600'}`}>
-              ₹ {parseFloat(analytics.fair_range.high).toFixed(2)}
-            </span>
+              <TrendingUp size={12} />₹ {parseFloat(analytics.fair_range?.high || 0).toFixed(2)}
+              <span className="text-[9px] font-medium opacity-60">high</span>
+            </div>
           </div>
         </div>
 
         {/* Bottom row */}
-        <div className={`mt-6 pt-5 border-t flex items-center justify-between gap-3 flex-wrap relative z-10
-          ${isDark ? 'border-white/10' : 'border-slate-100'}`}>
+        <div className={`pt-4 border-t flex items-center justify-between gap-3 flex-wrap relative z-10
+          ${isDark ? 'border-white/8' : 'border-slate-100'}`}>
           <p className={`text-xs font-medium flex items-center gap-2 ${isDark ? 'text-slate-400' : 'text-slate-500'}`}>
-            <span className={`w-2 h-2 rounded-full animate-pulse ${isDark ? 'bg-cyan-500' : 'bg-indigo-400'}`}></span>
+            <span className={`w-2 h-2 rounded-full animate-pulse ${isDark ? 'bg-cyan-500' : 'bg-indigo-400'}`} />
             Based on <strong className={`mx-1 ${isDark ? 'text-white' : 'text-slate-800'}`}>{analytics.total_samples} reports</strong>
           </p>
-          <div className={`px-3 py-1.5 rounded-full border text-[10px] font-black uppercase tracking-wide ${marketStatus.border} ${marketStatus.bg} ${marketStatus.color}`}>
+          <span className={`${marketStatus.cls} text-[10px] font-black uppercase tracking-wide px-3 py-1.5 rounded-full`}>
             {marketStatus.text}
-          </div>
+          </span>
         </div>
-      </div>
+      </motion.div>
 
-      {/* Side cards */}
+      {/* ── RIGHT COLUMN ──────────────────────────────────────── */}
       <div className="flex flex-col gap-4">
-        {/* Confidence meter */}
-        <div className="glass-panel p-5 rounded-2xl flex flex-col items-center justify-center flex-1">
-          <div className="relative hover:scale-105 transition-transform" style={{ width: 100, height: 100 }}>
-            <PieChart width={100} height={100}>
-              <Pie data={pieData} cx={50} cy={50} innerRadius={30} outerRadius={44}
+        {/* Confidence ring */}
+        <motion.div
+          initial={{ opacity: 0, y: 20 }}
+          animate={{ opacity: 1, y: 0 }}
+          transition={{ duration: 0.5, delay: 0.15, ease: [0.16, 1, 0.3, 1] }}
+          className="glass-panel card-hover p-5 rounded-2xl flex flex-col items-center justify-center flex-1 relative overflow-hidden"
+        >
+          <div className="absolute right-0 top-0 w-28 h-28 rounded-full pointer-events-none blur-3xl opacity-40"
+            style={{ background: isDark ? 'rgba(139,92,246,0.3)' : 'rgba(99,102,241,0.15)' }} />
+          <div className="relative hover:scale-105 transition-transform duration-300" style={{ width: 108, height: 108 }}>
+            <PieChart width={108} height={108}>
+              <Pie data={pieData} cx={54} cy={54} innerRadius={32} outerRadius={48}
                 dataKey="value" startAngle={90} endAngle={-270} stroke="none">
                 {pieData.map((_, i) => <Cell key={i} fill={PIE_COLORS[i % 2]} />)}
               </Pie>
             </PieChart>
-            <div className="absolute inset-0 flex items-center justify-center">
-              <span className={`text-lg font-black ${isDark ? 'text-cyan-400' : 'text-indigo-600'}`}>{confidenceScore}%</span>
+            <div className="absolute inset-0 flex flex-col items-center justify-center pointer-events-none">
+              <span className={`text-xl font-black leading-none ${isDark ? 'text-cyan-400' : 'text-indigo-600'}`}>
+                {confidenceScore}%
+              </span>
+              <span className={`text-[8px] font-bold mt-0.5 ${isDark ? 'text-slate-500' : 'text-slate-400'}`}>
+                conf.
+              </span>
             </div>
           </div>
-          <p className={`text-[10px] font-bold uppercase tracking-widest mt-2 ${isDark ? 'text-slate-500' : 'text-slate-400'}`}>
-            Data Confidence
-          </p>
-        </div>
-
-        {/* Photo proof */}
-        {analytics.last_image ? (
-          <div className="glass-panel rounded-2xl flex-1 relative overflow-hidden min-h-[110px]">
-            <img src={`${IMAGE_BASE}${analytics.last_image}`}
-              className="absolute inset-0 w-full h-full object-cover opacity-40 dark:opacity-20 group-hover:scale-110 transition-transform duration-1000"
-              alt="Photo proof" />
-            <div className={`absolute inset-0 bg-gradient-to-t ${isDark ? 'from-[#0f1115]' : 'from-white/90 via-white/50'} to-transparent`} />
-            <div className="absolute bottom-3 left-3 right-3">
-              <p className={`text-[9px] font-black uppercase tracking-wider flex items-center gap-1.5 px-2.5 py-1.5 rounded-full w-fit
-                border backdrop-blur-md
-                ${isDark ? 'bg-black/30 border-white/10 text-slate-300' : 'bg-white/80 border-slate-200 text-slate-600'}`}>
-                <ImageIcon size={11} className={isDark ? 'text-cyan-400' : 'text-indigo-500'} /> Photo Proof
-              </p>
-            </div>
-          </div>
-        ) : (
-          <div className={`flex-1 rounded-2xl border-2 border-dashed flex flex-col items-center justify-center min-h-[110px]
-            ${isDark ? 'border-white/10 bg-white/5' : 'border-slate-200 bg-slate-50/80'}`}>
-            <ImageIcon size={18} className={isDark ? 'text-slate-600' : 'text-slate-300'} />
-            <p className={`text-[9px] font-semibold mt-2 ${isDark ? 'text-slate-600' : 'text-slate-400'}`}>
-              No photo added
+          <div className="mt-3 text-center relative z-10">
+            <p className={`text-[10px] font-black uppercase tracking-widest ${isDark ? 'text-slate-500' : 'text-slate-400'}`}>
+              Data Confidence
+            </p>
+            <p className={`text-[9px] mt-0.5 ${isDark ? 'text-slate-600' : 'text-slate-400'}`}>
+              {analytics.total_samples}/30 reports
             </p>
           </div>
-        )}
+        </motion.div>
+
+        {/* ── PRICE STATS MINI CARDS ──── */}
+        <motion.div
+          initial={{ opacity: 0, y: 20 }}
+          animate={{ opacity: 1, y: 0 }}
+          transition={{ duration: 0.5, delay: 0.22, ease: [0.16, 1, 0.3, 1] }}
+          className="glass-panel rounded-2xl p-4 space-y-2"
+        >
+          {[
+            { label: 'Lowest Found', value: minP, cls: 'tag-success' },
+            { label: 'Community Avg', value: avg, cls: 'tag-neutral' },
+            { label: 'Highest Found', value: maxP, cls: 'tag-danger' },
+          ].map(({ label, value, cls }) => (
+            <div key={label} className={`flex items-center justify-between px-3 py-2 rounded-xl ${cls}`}>
+              <span className="text-[10px] font-bold uppercase tracking-wide opacity-70">{label}</span>
+              <span className="font-mono font-black text-sm">₹{parseFloat(value).toFixed(2)}</span>
+            </div>
+          ))}
+        </motion.div>
+
+        {/* Photo proof */}
+        <motion.div
+          initial={{ opacity: 0, y: 20 }}
+          animate={{ opacity: 1, y: 0 }}
+          transition={{ duration: 0.5, delay: 0.3, ease: [0.16, 1, 0.3, 1] }}
+          className="flex-1 min-h-[90px]"
+        >
+          {analytics.last_image ? (
+            <div className="glass-panel card-hover rounded-2xl relative overflow-hidden h-full min-h-[90px] group cursor-pointer">
+              <img src={`${IMAGE_BASE}${analytics.last_image}`}
+                className="absolute inset-0 w-full h-full object-cover opacity-40 dark:opacity-20 group-hover:scale-105 transition-transform duration-700"
+                alt="Photo proof" />
+              <div className={`absolute inset-0 bg-gradient-to-t ${isDark ? 'from-[#0f1115]' : 'from-white/90 via-white/40'} to-transparent`} />
+              <div className="absolute bottom-3 left-3">
+                <span className={`text-[9px] font-black uppercase tracking-wider flex items-center gap-1.5 px-2.5 py-1.5 rounded-full border backdrop-blur-md
+                  ${isDark ? 'bg-black/30 border-white/10 text-slate-300' : 'bg-white/80 border-slate-200 text-slate-600'}`}>
+                  <ImageIcon size={10} className={isDark ? 'text-cyan-400' : 'text-indigo-500'} /> Photo Proof
+                </span>
+              </div>
+            </div>
+          ) : (
+            <div className={`rounded-2xl border-2 border-dashed flex flex-col items-center justify-center h-full min-h-[90px] transition-colors
+              ${isDark ? 'border-white/10 bg-white/3' : 'border-slate-200 bg-slate-50/80'}`}>
+              <ImageIcon size={18} className={isDark ? 'text-slate-700' : 'text-slate-300'} />
+              <p className={`text-[9px] font-semibold mt-1.5 ${isDark ? 'text-slate-700' : 'text-slate-400'}`}>No photo added</p>
+            </div>
+          )}
+        </motion.div>
       </div>
     </div>
   );
