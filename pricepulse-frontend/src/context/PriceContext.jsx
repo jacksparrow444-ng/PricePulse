@@ -22,7 +22,7 @@ export const PriceProvider = ({ children }) => {
   const [recentSearches, setRecentSearches] = useState(() => {
     return JSON.parse(localStorage.getItem('recentSearches') || '[]');
   });
-  const [selectedLocation, setSelectedLocation] = useState('All');
+  const [selectedLocation, setSelectedLocation] = useState('All Areas');
   const [formData, setFormData] = useState({ product_id: '', product_name: '', price: '', location: '', store_name: '' });
   const [file, setFile] = useState(null);
   const [preview, setPreview] = useState(null);
@@ -70,13 +70,13 @@ export const PriceProvider = ({ children }) => {
           return [newSearch, ...filtered].slice(0, 5); // Limit to 5
         });
         
-        toast.success(`Matrix synchronized for ${response.data.product_name}`);
+        toast.success(`Found prices for ${response.data.product_name}!`);
       } else {
         setAnalytics(null);
-        toast.error("Node hash not found in current ledger");
+        toast.error('No prices found for this product yet.');
       }
     } catch (err) {
-      toast.error("Network synchronization error");
+      toast.error('Could not connect. Check your internet and try again.');
     } finally {
       setIsSearching(false);
     }
@@ -103,7 +103,7 @@ export const PriceProvider = ({ children }) => {
         headers: { 'Content-Type': 'multipart/form-data' } 
       });
 
-      toast.success("Node successfully injected into consensus network");
+      toast.success('Price submitted successfully! Thank you 🙏');
       
       // Reset form
       setFormData({ product_id: '', product_name: '', price: '', location: '', store_name: '' });
@@ -115,7 +115,7 @@ export const PriceProvider = ({ children }) => {
       if (searchId === formData.product_id) fetchAnalytics(null, searchId);
       
     } catch (err) {
-      toast.error("Injection failed. Please verify data integrity.");
+      toast.error('Submission failed. Please check your details and try again.');
     } finally {
       setIsSubmitting(false);
     }
