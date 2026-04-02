@@ -5,17 +5,16 @@ import { motion, AnimatePresence } from 'framer-motion';
 // Context
 import { usePrice } from './context/PriceContext';
 
-// Above-the-fold — eager load (visible immediately)
-import Header      from './components/Header';
-import QueryEngine from './components/QueryEngine';
-import DataInjection from './components/DataInjection';
+import SplashScreen from './components/SplashScreen';
 
-// Below-the-fold — lazy load (split into separate chunks)
-const SplashScreen      = lazy(() => import('./components/SplashScreen'));
+// Below-the-fold & heavy interaction components — lazy load to shrink main bundle
+const Header             = lazy(() => import('./components/Header'));
+const QueryEngine        = lazy(() => import('./components/QueryEngine'));
+const DataInjection      = lazy(() => import('./components/DataInjection'));
 const AnalyticsDashboard = lazy(() => import('./components/AnalyticsDashboard'));
-const VolatilityChart   = lazy(() => import('./components/VolatilityChart'));
-const NodeLedger        = lazy(() => import('./components/NodeLedger'));
-const Footer            = lazy(() => import('./components/Footer'));
+const VolatilityChart    = lazy(() => import('./components/VolatilityChart'));
+const NodeLedger         = lazy(() => import('./components/NodeLedger'));
+const Footer             = lazy(() => import('./components/Footer'));
 
 // Minimal skeleton shown while lazy chunks load
 const PanelSkeleton = ({ h = 'h-40' }) => (
@@ -48,9 +47,7 @@ function App() {
       {/* Splash intro */}
       <AnimatePresence>
         {!splashDone && (
-          <Suspense fallback={null}>
-            <SplashScreen onDone={() => setSplashDone(true)} />
-          </Suspense>
+          <SplashScreen onDone={() => setSplashDone(true)} />
         )}
       </AnimatePresence>
 
@@ -106,7 +103,9 @@ function App() {
         className="relative z-10"
       >
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8 md:py-12 relative min-h-screen flex flex-col">
-          <Header />
+          <Suspense fallback={<div className="h-20" />}>
+            <Header />
+          </Suspense>
 
           <div className="grid grid-cols-1 lg:grid-cols-12 gap-6 lg:gap-8 items-start flex-1 mt-8">
             {/* Left Column */}
@@ -116,8 +115,12 @@ function App() {
               transition={{ delay: 0.2, duration: 0.7 }}
               className="lg:col-span-4 space-y-6"
             >
-              <QueryEngine />
-              <DataInjection />
+              <Suspense fallback={<PanelSkeleton h="h-48" />}>
+                <QueryEngine />
+              </Suspense>
+              <Suspense fallback={<PanelSkeleton h="h-96" />}>
+                <DataInjection />
+              </Suspense>
 
               {/* Live Stats Bar */}
               {systemStats && (

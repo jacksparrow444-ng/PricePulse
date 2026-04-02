@@ -33,7 +33,6 @@ const SplashScreen = ({ onDone }) => {
           initial={{ opacity: 1 }}
           animate={phase === 'out' ? { 
             scale: 1.1, 
-            filter: 'blur(20px)',
             opacity: 0,
             transition: { duration: 0.8, ease: [0.7, 0, 0.3, 1] }
           } : { opacity: 1 }}
@@ -125,7 +124,7 @@ const SplashScreen = ({ onDone }) => {
               {/* Logo Glow Ring */}
               <motion.div 
                 initial={{ scale: 0.8, opacity: 0 }}
-                animate={{ scale: 1.5, opacity: 0 }}
+                animate={{ scale: 1, opacity: 1 }}
                 transition={{ duration: 2, repeat: Infinity, ease: "easeOut" }}
                 className="absolute inset-0 rounded-[2rem] border border-cyan-500/50 blur-sm"
               />
@@ -178,13 +177,13 @@ const SplashScreen = ({ onDone }) => {
                     {member.name}
                   </h3>
                   <div 
-                    className="absolute bottom-0 left-0 h-[2px] bg-cyan-500"
-                    style={{ width: '0%', backgroundColor: member.color }}
+                    className="absolute bottom-0 left-0 h-[2px] w-full"
+                    style={{ backgroundColor: member.color, transform: 'scaleX(0)', transformOrigin: 'left' }}
                   />
                   <motion.div 
-                    animate={{ width: ['0%', '100%', '0%'] }}
-                    transition={{ duration: 3, repeat: Infinity, delay: member.delay }}
-                    className="absolute bottom-0 left-0 h-[2px]"
+                    animate={{ scaleX: [0, 1, 0] }}
+                    transition={{ duration: 3, repeat: Infinity, delay: member.delay, ease: "linear" }}
+                    className="absolute bottom-0 left-0 h-[2px] w-full origin-left"
                     style={{ backgroundColor: member.color, opacity: 0.4 }}
                   />
                 </motion.div>
