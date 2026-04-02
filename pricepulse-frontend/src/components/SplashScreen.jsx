@@ -12,9 +12,9 @@ const SplashScreen = ({ onDone }) => {
   const [phase, setPhase] = useState('in');
 
   useEffect(() => {
-    // Stage-managed timing for "High Power" feel
-    const timerOut = setTimeout(() => setPhase('out'), 4200);
-    const timerDone = setTimeout(() => onDone(), 5200);
+    // Reduced for performance: content appears 2s faster
+    const timerOut  = setTimeout(() => setPhase('out'), 1800);
+    const timerDone = setTimeout(() => onDone(),        2500);
     return () => { clearTimeout(timerOut); clearTimeout(timerDone); };
   }, [onDone]);
 
