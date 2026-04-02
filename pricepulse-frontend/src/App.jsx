@@ -1,19 +1,26 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, lazy, Suspense } from 'react';
 import { Toaster } from 'react-hot-toast';
 import { motion, AnimatePresence } from 'framer-motion';
 
 // Context
 import { usePrice } from './context/PriceContext';
 
-// Modular Components
-import Header from './components/Header';
+// Above-the-fold — eager load (visible immediately)
+import Header      from './components/Header';
 import QueryEngine from './components/QueryEngine';
 import DataInjection from './components/DataInjection';
-import AnalyticsDashboard from './components/AnalyticsDashboard';
-import VolatilityChart from './components/VolatilityChart';
-import NodeLedger from './components/NodeLedger';
-import Footer from './components/Footer';
-import SplashScreen from './components/SplashScreen';
+
+// Below-the-fold — lazy load (split into separate chunks)
+const SplashScreen      = lazy(() => import('./components/SplashScreen'));
+const AnalyticsDashboard = lazy(() => import('./components/AnalyticsDashboard'));
+const VolatilityChart   = lazy(() => import('./components/VolatilityChart'));
+const NodeLedger        = lazy(() => import('./components/NodeLedger'));
+const Footer            = lazy(() => import('./components/Footer'));
+
+// Minimal skeleton shown while lazy chunks load
+const PanelSkeleton = ({ h = 'h-40' }) => (
+  <div className={`glass-panel rounded-2xl ${h} animate-pulse opacity-60`} />
+);
 
 function App() {
   const { theme, fetchSystemStats, systemStats, analytics } = usePrice();
@@ -41,7 +48,9 @@ function App() {
       {/* Splash intro */}
       <AnimatePresence>
         {!splashDone && (
-          <SplashScreen onDone={() => setSplashDone(true)} />
+          <Suspense fallback={null}>
+            <SplashScreen onDone={() => setSplashDone(true)} />
+          </Suspense>
         )}
       </AnimatePresence>
 
@@ -139,9 +148,15 @@ function App() {
             >
               {analytics ? (
                 <div className="space-y-6 animate-in fade-in zoom-in-95 duration-500">
-                  <AnalyticsDashboard />
-                  <VolatilityChart />
-                  <NodeLedger />
+                  <Suspense fallback={<PanelSkeleton h="h-64" />}>
+                    <AnalyticsDashboard />
+                  </Suspense>
+                  <Suspense fallback={<PanelSkeleton h="h-72" />}>
+                    <VolatilityChart />
+                  </Suspense>
+                  <Suspense fallback={<PanelSkeleton h="h-48" />}>
+                    <NodeLedger />
+                  </Suspense>
                 </div>
               ) : (
                 <div className="glass-panel h-full min-h-[480px] rounded-[2.5rem] flex flex-col items-center justify-center p-12 text-center relative overflow-hidden">
@@ -162,7 +177,9 @@ function App() {
             </motion.div>
           </div>
 
-          <Footer />
+          <Suspense fallback={null}>
+            <Footer />
+          </Suspense>
         </div>
       </motion.div>
     </div>

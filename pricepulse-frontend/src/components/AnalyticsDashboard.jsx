@@ -377,6 +377,7 @@ const AnalyticsDashboard = () => {
             {analytics.last_image ? (
               <div className="glass-panel card-hover rounded-2xl relative overflow-hidden h-full min-h-[90px] group">
                 <img src={`${IMAGE_BASE}${analytics.last_image}`}
+                  loading="lazy"
                   className="absolute inset-0 w-full h-full object-cover opacity-40 dark:opacity-20 group-hover:scale-105 transition-transform duration-700"
                   alt="Photo proof" />
                 <div className={`absolute inset-0 bg-gradient-to-t ${isDark ? 'from-[#0f1115]' : 'from-white/90 via-white/40'} to-transparent`} />
