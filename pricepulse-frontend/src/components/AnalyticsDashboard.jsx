@@ -197,7 +197,7 @@ const AnalyticsDashboard = () => {
                 <span className={`text-3xl font-black mt-3 ${isDark ? 'text-cyan-400' : 'text-indigo-500'}`}>₹</span>
                 <span
                   className={`price-hero font-black leading-none text-6xl sm:text-7xl lg:text-[88px]
-                    ${isDark ? 'text-white' : 'text-indigo-900'}`}
+                    ${isDark ? 'text-white price-glow-dark' : 'text-indigo-900 price-glow-light'}`}
                 >
                   {avg.toFixed(2)}
                 </span>
